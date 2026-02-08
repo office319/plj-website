@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://polsterreinigungjuelich.de/sitemap.xml

@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Datenschutzerklärung | Polsterreinigung Jülich</title>
+    <meta name="robots" content="noindex, nofollow">
+    
+    <!-- System Fonts (GDPR compliant - no external requests) -->
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'fresh': { 500: '#14b8a6', 600: '#0d9488' },
+                        'clean': { 500: '#0ea5e9', 600: '#0284c7' }
+                    },
+                    fontFamily: {
+                        'display': ['-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+                        'body': ['-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+        h1, h2, h3 { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-weight: 700; }
+    </style>
+
+    <link rel="stylesheet" href="assets/css/wow-effects.css">
+
+    <!-- Cookie Consent & Google Analytics (loads only after consent) -->
+    <script>
+        function loadGoogleAnalytics() {
+            if (document.querySelector('script[src*="googletagmanager"]')) return;
+            var script = document.createElement('script');
+            script.async = true;
+            script.src = 'https://www.googletagmanager.com/gtag/js?id=G-2DK1RFN442';
+            document.head.appendChild(script);
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            window.gtag = gtag;
+            gtag('js', new Date());
+            gtag('config', 'G-2DK1RFN442');
+        }
+        function acceptCookies() {
+            localStorage.setItem('cookieConsent', 'accepted');
+            loadGoogleAnalytics();
+            document.getElementById('cookieBanner').style.display = 'none';
+        }
+        function declineCookies() {
+            localStorage.setItem('cookieConsent', 'declined');
+            document.getElementById('cookieBanner').style.display = 'none';
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+            var consent = localStorage.getItem('cookieConsent');
+            if (consent === 'accepted') {
+                loadGoogleAnalytics();
+            } else if (consent !== 'declined') {
+                document.getElementById('cookieBanner').style.display = 'flex';
+            }
+        });
+    </script>
+    <style>
+        #cookieBanner {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(135deg, #003a3d 0%, #004e52 100%);
+            color: white;
+            padding: 20px;
+            z-index: 9999;
+            flex-wrap: wrap;
+            gap: 16px;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.3);
+        }
+        #cookieBanner p { margin: 0; max-width: 600px; font-size: 14px; line-height: 1.5; }
+        #cookieBanner a { color: #81B4B9; text-decoration: underline; }
+        #cookieBanner button { padding: 10px 24px; border-radius: 9999px; font-weight: 600; cursor: pointer; transition: all 0.2s; border: none; }
+        #cookieBanner .accept { background: #14b8a6; color: white; }
+        #cookieBanner .accept:hover { background: #0d9488; }
+        #cookieBanner .decline { background: transparent; color: white; border: 1px solid rgba(255,255,255,0.3); }
+        #cookieBanner .decline:hover { background: rgba(255,255,255,0.1); }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <!-- Cookie Consent Banner -->
+    <div id="cookieBanner">
+        <p>🍪 Diese Website verwendet Cookies - aber keine Krümel auf der Couch! Wir nutzen Google Analytics, um besser zu werden.
+           <a href="cookies.html">Mehr erfahren</a></p>
+        <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+            <button class="accept" onclick="acceptCookies()">Akzeptieren</button>
+            <button class="decline" onclick="declineCookies()">Ablehnen</button>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm py-4">
+        <div class="max-w-4xl mx-auto px-4 flex items-center justify-between">
+            <a href="index.html" class="flex items-center gap-2">
+                <div class="w-10 h-10 bg-gradient-to-br from-clean-500 to-fresh-500 rounded-xl flex items-center justify-center">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>
+                    </svg>
+                </div>
+                <span class="font-display font-bold text-lg">Polsterreinigung Jülich</span>
+            </a>
+            <a href="index.html" class="text-clean-600 hover:text-clean-700 font-medium">← Zurück</a>
+        </div>
+    </nav>
+
+    <!-- Content -->
+    <main class="max-w-4xl mx-auto px-4 py-16">
+        <h1 class="text-4xl font-display font-bold text-slate-800 mb-8">Datenschutzerklärung</h1>
+        
+        <div class="bg-white rounded-2xl p-8 shadow-lg space-y-8">
+            
+            <section>
+                <h2 class="text-xl font-display font-bold text-slate-800 mb-4">1. Datenschutz auf einen Blick</h2>
+                
+                <h3 class="text-lg font-semibold text-slate-700 mt-6 mb-3">Allgemeine Hinweise</h3>
+                <p class="text-slate-700">
+                    Die folgenden Hinweise geben einen einfachen Überblick darüber, was mit Ihren personenbezogenen Daten passiert, wenn Sie diese Website besuchen. Personenbezogene Daten sind alle Daten, mit denen Sie persönlich identifiziert werden können. Ausführliche Informationen zum Thema Datenschutz entnehmen Sie unserer unter diesem Text aufgeführten Datenschutzerklärung.
+                </p>
+                
+                <h3 class="text-lg font-semibold text-slate-700 mt-6 mb-3">Datenerfassung auf dieser Website</h3>
+                <p class="text-slate-700">
+                    <strong>Wer ist verantwortlich für die Datenerfassung auf dieser Website?</strong><br>
+                    Die Datenverarbeitung auf dieser Website erfolgt durch den Websitebetreiber. Dessen Kontaktdaten können Sie dem Abschnitt "Hinweis zur Verantwortlichen Stelle" in dieser Datenschutzerklärung entnehmen.
+                </p>
+                
+                <p class="text-slate-700 mt-4">
+                    <strong>Wie erfassen wir Ihre Daten?</strong><br>
+                    Ihre Daten werden zum einen dadurch erhoben, dass Sie uns diese mitteilen. Hierbei kann es sich z. B. um Daten handeln, die Sie in ein Kontaktformular eingeben.
+                </p>
+                
+                <p class="text-slate-700 mt-4">
+                    Andere Daten werden automatisch oder nach Ihrer Einwilligung beim Besuch der Website durch unsere IT-Systeme erfasst. Das sind vor allem technische Daten (z. B. Internetbrowser, Betriebssystem oder Uhrzeit des Seitenaufrufs). Die Erfassung dieser Daten erfolgt automatisch, sobald Sie diese Website betreten.
+                </p>
+                
+                <p class="text-slate-700 mt-4">
+                    <strong>Wofür nutzen wir Ihre Daten?</strong><br>
+                    Ein Teil der Daten wird erhoben, um eine fehlerfreie Bereitstellung der Website zu gewährleisten. Andere Daten können zur Analyse Ihres Nutzerverhaltens verwendet werden.
+                </p>
+                
+                <p class="text-slate-700 mt-4">
+                    <strong>Welche Rechte haben Sie bezüglich Ihrer Daten?</strong><br>
+                    Sie haben jederzeit das Recht, unentgeltlich Auskunft über Herkunft, Empfänger und Zweck Ihrer gespeicherten personenbezogenen Daten zu erhalten. Sie haben außerdem ein Recht, die Berichtigung oder Löschung dieser Daten zu verlangen. Wenn Sie eine Einwilligung zur Datenverarbeitung erteilt haben, können Sie diese Einwilligung jederzeit für die Zukunft widerrufen. Außerdem haben Sie das Recht, unter bestimmten Umständen die Einschränkung der Verarbeitung Ihrer personenbezogenen Daten zu verlangen. Des Weiteren steht Ihnen ein Beschwerderecht bei der zuständigen Aufsichtsbehörde zu.
+                </p>
+            </section>
+            
+            <section>
+                <h2 class="text-xl font-display font-bold text-slate-800 mb-4">2. Hosting</h2>
+                <p class="text-slate-700">
+                    Wir hosten die Inhalte unserer Website bei folgendem Anbieter:
+                </p>
+                
+                <h3 class="text-lg font-semibold text-slate-700 mt-6 mb-3">Externes Hosting</h3>
+                <p class="text-slate-700">
+                    Diese Website wird extern gehostet. Die personenbezogenen Daten, die auf dieser Website erfasst werden, werden auf den Servern des Hosters gespeichert. Hierbei kann es sich v. a. um IP-Adressen, Kontaktanfragen, Meta- und Kommunikationsdaten, Vertragsdaten, Kontaktdaten, Namen, Websitezugriffe und sonstige Daten, die über eine Website generiert werden, handeln.
+                </p>
+                <p class="text-slate-700 mt-4">
+                    Das externe Hosting erfolgt zum Zwecke der Vertragserfüllung gegenüber unseren potenziellen und bestehenden Kunden (Art. 6 Abs. 1 lit. b DSGVO) und im Interesse einer sicheren, schnellen und effizienten Bereitstellung unseres Online-Angebots durch einen professionellen Anbieter (Art. 6 Abs. 1 lit. f DSGVO).
+                </p>
+            </section>
+            
+            <section>
+                <h2 class="text-xl font-display font-bold text-slate-800 mb-4">3. Allgemeine Hinweise und Pflichtinformationen</h2>
+                
+                <h3 class="text-lg font-semibold text-slate-700 mt-6 mb-3">Datenschutz</h3>
+                <p class="text-slate-700">
+                    Die Betreiber dieser Seiten nehmen den Schutz Ihrer persönlichen Daten sehr ernst. Wir behandeln Ihre personenbezogenen Daten vertraulich und entsprechend der gesetzlichen Datenschutzvorschriften sowie dieser Datenschutzerklärung.
+                </p>
+                <p class="text-slate-700 mt-4">
+                    Wenn Sie diese Website benutzen, werden verschiedene personenbezogene Daten erhoben. Personenbezogene Daten sind Daten, mit denen Sie persönlich identifiziert werden können. Die vorliegende Datenschutzerklärung erläutert, welche Daten wir erheben und wofür wir sie nutzen. Sie erläutert auch, wie und zu welchem Zweck das geschieht.
+                </p>
+                
+                <h3 class="text-lg font-semibold text-slate-700 mt-6 mb-3">Hinweis zur verantwortlichen Stelle</h3>
+                <p class="text-slate-700">
+                    Die verantwortliche Stelle für die Datenverarbeitung auf dieser Website ist:
+                </p>
+                <p class="text-slate-700 mt-4">
+                    Daniel Bała<br>
+                    Polsterreinigung Jülich<br>
+                    Zur Inde 26<br>
+                    52428 Jülich-Kirchberg<br><br>
+                    Telefon: +49 176 709 39 509 (Hauptnummer)<br>
+                    Telefon: +49 178 33 66 988<br>
+                    E-Mail: kontakt@polsterreinigungjuelich.de
+                </p>
+                <p class="text-slate-700 mt-4">
+                    Verantwortliche Stelle ist die natürliche oder juristische Person, die allein oder gemeinsam mit anderen über die Zwecke und Mittel der Verarbeitung von personenbezogenen Daten (z. B. Namen, E-Mail-Adressen o. Ä.) entscheidet.
+                </p>
+                
+                <h3 class="text-lg font-semibold text-slate-700 mt-6 mb-3">Speicherdauer</h3>
+                <p class="text-slate-700">
+                    Soweit innerhalb dieser Datenschutzerklärung keine speziellere Speicherdauer genannt wurde, verbleiben Ihre personenbezogenen Daten bei uns, bis der Zweck für die Datenverarbeitung entfällt. Wenn Sie ein berechtigtes Löschersuchen geltend machen oder eine Einwilligung zur Datenverarbeitung widerrufen, werden Ihre Daten gelöscht, sofern wir keine anderen rechtlich zulässigen Gründe für die Speicherung Ihrer personenbezogenen Daten haben (z. B. steuer- oder handelsrechtliche Aufbewahrungsfristen); im letztgenannten Fall erfolgt die Löschung nach Fortfall dieser Gründe.
+                </p>
+                
+                <h3 class="text-lg font-semibold text-slate-700 mt-6 mb-3">Widerruf Ihrer Einwilligung zur Datenverarbeitung</h3>
+                <p class="text-slate-700">
+                    Viele Datenverarbeitungsvorgänge sind nur mit Ihrer ausdrücklichen Einwilligung möglich. Sie können eine bereits erteilte Einwilligung jederzeit widerrufen. Die Rechtmäßigkeit der bis zum Widerruf erfolgten Datenverarbeitung bleibt vom Widerruf unberührt.
+                </p>
+                
+                <h3 class="text-lg font-semibold text-slate-700 mt-6 mb-3">Beschwerderecht bei der zuständigen Aufsichtsbehörde</h3>
+                <p class="text-slate-700">
+                    Im Falle von Verstößen gegen die DSGVO steht den Betroffenen ein Beschwerderecht bei einer Aufsichtsbehörde zu. Das Beschwerderecht besteht unbeschadet anderweitiger verwaltungsrechtlicher oder gerichtlicher Rechtsbehelfe.
+                </p>
+                
+                <h3 class="text-lg font-semibold text-slate-700 mt-6 mb-3">Recht auf Datenübertragbarkeit</h3>
+                <p class="text-slate-700">
+                    Sie haben das Recht, Daten, die wir auf Grundlage Ihrer Einwilligung oder in Erfüllung eines Vertrags automatisiert verarbeiten, an sich oder an einen Dritten in einem gängigen, maschinenlesbaren Format aushändigen zu lassen.
+                </p>
+                
+                <h3 class="text-lg font-semibold text-slate-700 mt-6 mb-3">Auskunft, Löschung und Berichtigung</h3>
+                <p class="text-slate-700">
+                    Sie haben im Rahmen der geltenden gesetzlichen Bestimmungen jederzeit das Recht auf unentgeltliche Auskunft über Ihre gespeicherten personenbezogenen Daten, deren Herkunft und Empfänger und den Zweck der Datenverarbeitung und ggf. ein Recht auf Berichtigung oder Löschung dieser Daten.
+                </p>
+            </section>
+            
+            <section>
+                <h2 class="text-xl font-display font-bold text-slate-800 mb-4">4. Datenerfassung auf dieser Website</h2>
+                
+                <h3 class="text-lg font-semibold text-slate-700 mt-6 mb-3">Kontaktformular</h3>
+                <p class="text-slate-700">
+                    Wenn Sie uns per Kontaktformular Anfragen zukommen lassen, werden Ihre Angaben aus dem Anfrageformular inklusive der von Ihnen dort angegebenen Kontaktdaten zwecks Bearbeitung der Anfrage und für den Fall von Anschlussfragen bei uns gespeichert. Diese Daten geben wir nicht ohne Ihre Einwilligung weiter.
+                </p>
+                <p class="text-slate-700 mt-4">
+                    Die Verarbeitung dieser Daten erfolgt auf Grundlage von Art. 6 Abs. 1 lit. b DSGVO, sofern Ihre Anfrage mit der Erfüllung eines Vertrags zusammenhängt oder zur Durchführung vorvertraglicher Maßnahmen erforderlich ist. In allen übrigen Fällen beruht die Verarbeitung auf unserem berechtigten Interesse an der effektiven Bearbeitung der an uns gerichteten Anfragen (Art. 6 Abs. 1 lit. f DSGVO) oder auf Ihrer Einwilligung (Art. 6 Abs. 1 lit. a DSGVO) sofern diese abgefragt wurde.
+                </p>
+                <p class="text-slate-700 mt-4">
+                    Die von Ihnen im Kontaktformular eingegebenen Daten verbleiben bei uns, bis Sie uns zur Löschung auffordern, Ihre Einwilligung zur Speicherung widerrufen oder der Zweck für die Datenspeicherung entfällt (z. B. nach abgeschlossener Bearbeitung Ihrer Anfrage). Zwingende gesetzliche Bestimmungen – insbesondere Aufbewahrungsfristen – bleiben unberührt.
+                </p>
+                
+                <h3 class="text-lg font-semibold text-slate-700 mt-6 mb-3">Anfrage per E-Mail, Telefon oder WhatsApp</h3>
+                <p class="text-slate-700">
+                    Wenn Sie uns per E-Mail, Telefon oder WhatsApp kontaktieren, wird Ihre Anfrage inklusive aller daraus hervorgehenden personenbezogenen Daten (Name, Anfrage) zum Zwecke der Bearbeitung Ihres Anliegens bei uns gespeichert und verarbeitet. Diese Daten geben wir nicht ohne Ihre Einwilligung weiter.
+                </p>
+                <p class="text-slate-700 mt-4">
+                    Die Verarbeitung dieser Daten erfolgt auf Grundlage von Art. 6 Abs. 1 lit. b DSGVO, sofern Ihre Anfrage mit der Erfüllung eines Vertrags zusammenhängt oder zur Durchführung vorvertraglicher Maßnahmen erforderlich ist. In allen übrigen Fällen beruht die Verarbeitung auf Ihrer Einwilligung (Art. 6 Abs. 1 lit. a DSGVO) und/oder auf unseren berechtigten Interessen (Art. 6 Abs. 1 lit. f DSGVO), da wir ein berechtigtes Interesse an der effektiven Bearbeitung der an uns gerichteten Anfragen haben.
+                </p>
+            </section>
+            
+            <section>
+                <h2 class="text-xl font-display font-bold text-slate-800 mb-4">5. Plugins und Tools</h2>
+                
+                <h3 class="text-lg font-semibold text-slate-700 mt-6 mb-3">Google Maps</h3>
+                <p class="text-slate-700">
+                    Diese Seite nutzt den Kartendienst Google Maps. Anbieter ist die Google Ireland Limited („Google"), Gordon House, Barrow Street, Dublin 4, Irland.
+                </p>
+                <p class="text-slate-700 mt-4">
+                    Zur Nutzung der Funktionen von Google Maps ist es notwendig, Ihre IP-Adresse zu speichern. Diese Informationen werden in der Regel an einen Server von Google in den USA übertragen und dort gespeichert. Der Anbieter dieser Seite hat keinen Einfluss auf diese Datenübertragung.
+                </p>
+                <p class="text-slate-700 mt-4">
+                    Die Nutzung von Google Maps erfolgt im Interesse einer ansprechenden Darstellung unserer Online-Angebote und an einer leichten Auffindbarkeit der von uns auf der Website angegebenen Orte. Dies stellt ein berechtigtes Interesse im Sinne von Art. 6 Abs. 1 lit. f DSGVO dar.
+                </p>
+                <p class="text-slate-700 mt-4">
+                    Mehr Informationen zum Umgang mit Nutzerdaten finden Sie in der Datenschutzerklärung von Google:<br>
+                    <a href="https://policies.google.com/privacy" target="_blank" class="text-clean-600 hover:underline">https://policies.google.com/privacy</a>
+                </p>
+                
+                <h3 class="text-lg font-semibold text-slate-700 mt-6 mb-3">Schriftarten</h3>
+                <p class="text-slate-700">
+                    Diese Website verwendet ausschließlich lokale System-Schriftarten (wie z.B. die Standard-Schriftarten Ihres Betriebssystems). Es werden keine externen Schriftarten von Drittanbietern (wie Google Fonts) geladen. Eine Verbindung zu externen Servern für Schriftarten findet nicht statt.
+                </p>
+            </section>
+            
+        </div>
+        
+        <p class="text-slate-500 text-sm mt-8 text-center">
+            Stand: Dezember 2025
+        </p>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-white py-8 mt-16">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            <p class="text-slate-400">© 2025 Polsterreinigung Jülich. Alle Rechte vorbehalten.</p>
+            <div class="mt-4 space-x-4">
+                <a href="impressum.html" class="text-slate-400 hover:text-white">Impressum</a>
+                <a href="datenschutz.html" class="text-slate-400 hover:text-white">Datenschutz</a>
+                <a href="agb.html" class="text-slate-400 hover:text-white">AGB</a>
+                <a href="cookies.html" class="text-slate-400 hover:text-white">Cookies</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="assets/js/wow-effects.js"></script>
+</body>
+</html>

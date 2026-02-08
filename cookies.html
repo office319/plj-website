@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cookie-Richtlinie | Polsterreinigung Jülich</title>
+    <meta name="robots" content="noindex, nofollow">
+
+    <!-- System Fonts (GDPR compliant - no external requests) -->
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'fresh': { 500: '#14b8a6', 600: '#0d9488' },
+                        'clean': { 500: '#0ea5e9', 600: '#0284c7' }
+                    },
+                    fontFamily: {
+                        'display': ['-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+                        'body': ['-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+        h1, h2, h3 { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-weight: 700; }
+    </style>
+
+    <link rel="stylesheet" href="assets/css/wow-effects.css">
+
+    <!-- Cookie Consent & Google Analytics (loads only after consent) -->
+    <script>
+        function loadGoogleAnalytics() {
+            if (document.querySelector('script[src*="googletagmanager"]')) return;
+            var script = document.createElement('script');
+            script.async = true;
+            script.src = 'https://www.googletagmanager.com/gtag/js?id=G-2DK1RFN442';
+            document.head.appendChild(script);
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            window.gtag = gtag;
+            gtag('js', new Date());
+            gtag('config', 'G-2DK1RFN442');
+        }
+        function acceptCookies() {
+            localStorage.setItem('cookieConsent', 'accepted');
+            loadGoogleAnalytics();
+            document.getElementById('cookieBanner').style.display = 'none';
+            updateConsentStatus();
+        }
+        function declineCookies() {
+            localStorage.setItem('cookieConsent', 'declined');
+            document.getElementById('cookieBanner').style.display = 'none';
+            updateConsentStatus();
+        }
+        function resetCookieConsent() {
+            localStorage.removeItem('cookieConsent');
+            location.reload();
+        }
+        function updateConsentStatus() {
+            var consent = localStorage.getItem('cookieConsent');
+            var statusEl = document.getElementById('consentStatus');
+            if (statusEl) {
+                if (consent === 'accepted') {
+                    statusEl.innerHTML = '<span class="text-green-600 font-semibold">Akzeptiert</span> - Google Analytics ist aktiv';
+                } else if (consent === 'declined') {
+                    statusEl.innerHTML = '<span class="text-red-600 font-semibold">Abgelehnt</span> - Google Analytics ist deaktiviert';
+                } else {
+                    statusEl.innerHTML = '<span class="text-yellow-600 font-semibold">Noch nicht entschieden</span>';
+                }
+            }
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+            var consent = localStorage.getItem('cookieConsent');
+            if (consent === 'accepted') {
+                loadGoogleAnalytics();
+            } else if (consent !== 'declined') {
+                document.getElementById('cookieBanner').style.display = 'flex';
+            }
+            updateConsentStatus();
+        });
+    </script>
+    <style>
+        #cookieBanner {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(135deg, #003a3d 0%, #004e52 100%);
+            color: white;
+            padding: 20px;
+            z-index: 9999;
+            flex-wrap: wrap;
+            gap: 16px;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.3);
+        }
+        #cookieBanner p { margin: 0; max-width: 600px; font-size: 14px; line-height: 1.5; }
+        #cookieBanner a { color: #81B4B9; text-decoration: underline; }
+        #cookieBanner button { padding: 10px 24px; border-radius: 9999px; font-weight: 600; cursor: pointer; transition: all 0.2s; border: none; }
+        #cookieBanner .accept { background: #14b8a6; color: white; }
+        #cookieBanner .accept:hover { background: #0d9488; }
+        #cookieBanner .decline { background: transparent; color: white; border: 1px solid rgba(255,255,255,0.3); }
+        #cookieBanner .decline:hover { background: rgba(255,255,255,0.1); }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <!-- Cookie Consent Banner -->
+    <div id="cookieBanner">
+        <p>🍪 Diese Website verwendet Cookies - aber keine Krümel auf der Couch! Wir nutzen Google Analytics, um besser zu werden.
+           <a href="cookies.html">Mehr erfahren</a></p>
+        <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+            <button class="accept" onclick="acceptCookies()">Akzeptieren</button>
+            <button class="decline" onclick="declineCookies()">Ablehnen</button>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm py-4">
+        <div class="max-w-4xl mx-auto px-4 flex items-center justify-between">
+            <a href="index.html" class="flex items-center gap-2">
+                <div class="w-10 h-10 bg-gradient-to-br from-clean-500 to-fresh-500 rounded-xl flex items-center justify-center">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>
+                    </svg>
+                </div>
+                <span class="font-display font-bold text-lg">Polsterreinigung Jülich</span>
+            </a>
+            <a href="index.html" class="text-clean-600 hover:text-clean-700 font-medium">← Zurück</a>
+        </div>
+    </nav>
+
+    <!-- Content -->
+    <main class="max-w-4xl mx-auto px-4 py-16">
+        <h1 class="text-4xl font-display font-bold text-slate-800 mb-8">Cookie-Richtlinie</h1>
+
+        <div class="bg-white rounded-2xl p-8 shadow-lg space-y-8">
+
+            <!-- Current Status -->
+            <section class="bg-slate-50 rounded-xl p-6">
+                <h2 class="text-xl font-display font-bold text-slate-800 mb-4">Ihr aktueller Cookie-Status</h2>
+                <p class="text-slate-700 mb-4" id="consentStatus">Wird geladen...</p>
+                <button onclick="resetCookieConsent()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 px-4 py-2 rounded-lg font-medium transition">
+                    Einstellungen zurücksetzen
+                </button>
+            </section>
+
+            <section>
+                <h2 class="text-xl font-display font-bold text-slate-800 mb-4">Was sind Cookies?</h2>
+                <p class="text-slate-700">
+                    Cookies sind kleine Textdateien, die von Websites auf Ihrem Gerät gespeichert werden. Sie dienen dazu, Informationen über Ihre Nutzung der Website zu speichern, um Ihnen ein besseres Erlebnis zu bieten und die Website zu verbessern.
+                </p>
+            </section>
+
+            <section>
+                <h2 class="text-xl font-display font-bold text-slate-800 mb-4">Welche Cookies verwenden wir?</h2>
+
+                <div class="bg-slate-50 rounded-xl p-6 mt-4">
+                    <h3 class="text-lg font-semibold text-slate-700 mb-3">Google Analytics (Optional)</h3>
+                    <p class="text-slate-700 mb-3">
+                        Wir verwenden Google Analytics, um zu verstehen, wie Besucher unsere Website nutzen. Diese Cookies werden <strong>nur gesetzt, wenn Sie ausdrücklich zustimmen</strong>.
+                    </p>
+                    <table class="w-full text-sm">
+                        <tr class="border-b border-slate-200">
+                            <td class="py-2 font-medium">Anbieter</td>
+                            <td class="py-2">Google Ireland Limited</td>
+                        </tr>
+                        <tr class="border-b border-slate-200">
+                            <td class="py-2 font-medium">Zweck</td>
+                            <td class="py-2">Website-Analyse, Besucherstatistiken</td>
+                        </tr>
+                        <tr class="border-b border-slate-200">
+                            <td class="py-2 font-medium">Speicherdauer</td>
+                            <td class="py-2">Bis zu 2 Jahre</td>
+                        </tr>
+                        <tr>
+                            <td class="py-2 font-medium">Rechtsgrundlage</td>
+                            <td class="py-2">Art. 6 Abs. 1 lit. a DSGVO (Einwilligung)</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="bg-slate-50 rounded-xl p-6 mt-4">
+                    <h3 class="text-lg font-semibold text-slate-700 mb-3">Lokale Speicherung (localStorage)</h3>
+                    <p class="text-slate-700 mb-3">
+                        Wir speichern Ihre Cookie-Einstellungspräferenz lokal in Ihrem Browser, damit wir Sie nicht bei jedem Besuch erneut fragen müssen.
+                    </p>
+                    <table class="w-full text-sm">
+                        <tr class="border-b border-slate-200">
+                            <td class="py-2 font-medium">Name</td>
+                            <td class="py-2">cookieConsent</td>
+                        </tr>
+                        <tr class="border-b border-slate-200">
+                            <td class="py-2 font-medium">Zweck</td>
+                            <td class="py-2">Speicherung Ihrer Cookie-Entscheidung</td>
+                        </tr>
+                        <tr class="border-b border-slate-200">
+                            <td class="py-2 font-medium">Speicherdauer</td>
+                            <td class="py-2">Bis Sie es löschen oder zurücksetzen</td>
+                        </tr>
+                        <tr>
+                            <td class="py-2 font-medium">Rechtsgrundlage</td>
+                            <td class="py-2">Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse)</td>
+                        </tr>
+                    </table>
+                </div>
+            </section>
+
+            <section>
+                <h2 class="text-xl font-display font-bold text-slate-800 mb-4">Ihre Rechte</h2>
+                <p class="text-slate-700">
+                    Sie können Ihre Einwilligung jederzeit widerrufen, indem Sie auf "Einstellungen zurücksetzen" oben klicken. Sie können auch die Cookies in Ihren Browser-Einstellungen löschen.
+                </p>
+            </section>
+
+            <section>
+                <h2 class="text-xl font-display font-bold text-slate-800 mb-4">Kontakt</h2>
+                <p class="text-slate-700">
+                    Bei Fragen zum Datenschutz oder zu Cookies wenden Sie sich bitte an:<br><br>
+                    Daniel Bała<br>
+                    Polsterreinigung Jülich<br>
+                    Zur Inde 26<br>
+                    52428 Jülich-Kirchberg<br><br>
+                    E-Mail: <a href="mailto:kontakt@polsterreinigungjuelich.de" class="text-clean-600 hover:underline">kontakt@polsterreinigungjuelich.de</a>
+                </p>
+            </section>
+
+        </div>
+
+        <p class="text-slate-500 text-sm mt-8 text-center">
+            Stand: Januar 2026
+        </p>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-white py-8 mt-16">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            <p class="text-slate-400">© 2025 Polsterreinigung Jülich. Alle Rechte vorbehalten.</p>
+            <div class="mt-4 space-x-4">
+                <a href="impressum.html" class="text-slate-400 hover:text-white">Impressum</a>
+                <a href="datenschutz.html" class="text-slate-400 hover:text-white">Datenschutz</a>
+                <a href="agb.html" class="text-slate-400 hover:text-white">AGB</a>
+                <a href="cookies.html" class="text-slate-400 hover:text-white">Cookies</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="assets/js/wow-effects.js"></script>
+</body>
+</html>

@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AGB | Polsterreinigung Jülich</title>
+    <meta name="robots" content="noindex, nofollow">
+    
+    <!-- System Fonts (GDPR compliant - no external requests) -->
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'fresh': { 500: '#14b8a6', 600: '#0d9488' },
+                        'clean': { 500: '#0ea5e9', 600: '#0284c7' }
+                    },
+                    fontFamily: {
+                        'display': ['-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+                        'body': ['-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+        h1, h2, h3 { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-weight: 700; }
+    </style>
+
+    <link rel="stylesheet" href="assets/css/wow-effects.css">
+
+    <!-- Cookie Consent & Google Analytics (loads only after consent) -->
+    <script>
+        function loadGoogleAnalytics() {
+            if (document.querySelector('script[src*="googletagmanager"]')) return;
+            var script = document.createElement('script');
+            script.async = true;
+            script.src = 'https://www.googletagmanager.com/gtag/js?id=G-2DK1RFN442';
+            document.head.appendChild(script);
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            window.gtag = gtag;
+            gtag('js', new Date());
+            gtag('config', 'G-2DK1RFN442');
+        }
+        function acceptCookies() {
+            localStorage.setItem('cookieConsent', 'accepted');
+            loadGoogleAnalytics();
+            document.getElementById('cookieBanner').style.display = 'none';
+        }
+        function declineCookies() {
+            localStorage.setItem('cookieConsent', 'declined');
+            document.getElementById('cookieBanner').style.display = 'none';
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+            var consent = localStorage.getItem('cookieConsent');
+            if (consent === 'accepted') {
+                loadGoogleAnalytics();
+            } else if (consent !== 'declined') {
+                document.getElementById('cookieBanner').style.display = 'flex';
+            }
+        });
+    </script>
+    <style>
+        #cookieBanner {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(135deg, #003a3d 0%, #004e52 100%);
+            color: white;
+            padding: 20px;
+            z-index: 9999;
+            flex-wrap: wrap;
+            gap: 16px;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.3);
+        }
+        #cookieBanner p { margin: 0; max-width: 600px; font-size: 14px; line-height: 1.5; }
+        #cookieBanner a { color: #81B4B9; text-decoration: underline; }
+        #cookieBanner button { padding: 10px 24px; border-radius: 9999px; font-weight: 600; cursor: pointer; transition: all 0.2s; border: none; }
+        #cookieBanner .accept { background: #14b8a6; color: white; }
+        #cookieBanner .accept:hover { background: #0d9488; }
+        #cookieBanner .decline { background: transparent; color: white; border: 1px solid rgba(255,255,255,0.3); }
+        #cookieBanner .decline:hover { background: rgba(255,255,255,0.1); }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <!-- Cookie Consent Banner -->
+    <div id="cookieBanner">
+        <p>🍪 Diese Website verwendet Cookies - aber keine Krümel auf der Couch! Wir nutzen Google Analytics, um besser zu werden.
+           <a href="cookies.html">Mehr erfahren</a></p>
+        <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+            <button class="accept" onclick="acceptCookies()">Akzeptieren</button>
+            <button class="decline" onclick="declineCookies()">Ablehnen</button>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm py-4">
+        <div class="max-w-4xl mx-auto px-4 flex items-center justify-between">
+            <a href="index.html" class="flex items-center gap-2">
+                <div class="w-10 h-10 bg-gradient-to-br from-clean-500 to-fresh-500 rounded-xl flex items-center justify-center">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>
+                    </svg>
+                </div>
+                <span class="font-display font-bold text-lg">Polsterreinigung Jülich</span>
+            </a>
+            <a href="index.html" class="text-clean-600 hover:text-clean-700 font-medium">← Zurück</a>
+        </div>
+    </nav>
+
+    <!-- Content -->
+    <main class="max-w-4xl mx-auto px-4 py-16">
+        <h1 class="text-4xl font-display font-bold text-slate-800 mb-8">Allgemeine Geschäftsbedingungen (AGB)</h1>
+        
+        <div class="bg-white rounded-2xl p-8 shadow-lg space-y-8">
+            
+            <section>
+                <h2 class="text-xl font-display font-bold text-slate-800 mb-4">§ 1 Geltungsbereich</h2>
+                <p class="text-slate-700">
+                    (1) Diese Allgemeinen Geschäftsbedingungen (AGB) gelten für alle Verträge zwischen Daniel Bała, Polsterreinigung Jülich, Zur Inde 26, 52428 Jülich-Kirchberg (nachfolgend "Auftragnehmer") und dem Kunden (nachfolgend "Auftraggeber") über Reinigungsdienstleistungen für Polstermöbel, Matratzen, Autositze und ähnliche Gegenstände.
+                </p>
+                <p class="text-slate-700 mt-4">
+                    (2) Abweichende Bedingungen des Auftraggebers werden nicht anerkannt, es sei denn, der Auftragnehmer stimmt ihrer Geltung ausdrücklich schriftlich zu.
+                </p>
+            </section>
+            
+            <section>
+                <h2 class="text-xl font-display font-bold text-slate-800 mb-4">§ 2 Vertragsschluss</h2>
+                <p class="text-slate-700">
+                    (1) Der Vertrag kommt durch Auftragserteilung des Auftraggebers und Annahme durch den Auftragnehmer zustande. Die Annahme kann schriftlich, mündlich oder durch Ausführung der Leistung erfolgen.
+                </p>
+                <p class="text-slate-700 mt-4">
+                    (2) Angebote des Auftragnehmers sind freibleibend und unverbindlich, sofern nicht ausdrücklich etwas anderes vereinbart wurde.
+                </p>
+                <p class="text-slate-700 mt-4">
+                    (3) Der endgültige Preis wird nach Besichtigung der zu reinigenden Gegenstände vor Ort festgelegt und kann je nach Verschmutzungsgrad und Material vom Richtpreis abweichen.
+                </p>
+            </section>
+            
+            <section>
+                <h2 class="text-xl font-display font-bold text-slate-800 mb-4">§ 3 Leistungsumfang</h2>
+                <p class="text-slate-700">
+                    (1) Der Auftragnehmer erbringt Reinigungsdienstleistungen für Polstermöbel, Matratzen, Autositze, Teppiche und ähnliche Gegenstände.
+                </p>
+                <p class="text-slate-700 mt-4">
+                    (2) Die Reinigung erfolgt mit professionellen Geräten und umweltfreundlichen Reinigungsmitteln direkt beim Auftraggeber vor Ort.
+                </p>
+                <p class="text-slate-700 mt-4">
+                    (3) Der Auftragnehmer garantiert eine fachgerechte Durchführung der Reinigung. Eine vollständige Entfernung aller Flecken kann jedoch nicht garantiert werden, da dies vom Alter, der Art und der Vorbehandlung der Flecken sowie vom Material abhängt.
+                </p>
+            </section>
+            
+            <section>
+                <h2 class="text-xl font-display font-bold text-slate-800 mb-4">§ 4 Termine und Ausführung</h2>
+                <p class="text-slate-700">
+                    (1) Termine werden nach Vereinbarung festgelegt. Der Auftragnehmer bemüht sich, vereinbarte Termine einzuhalten, haftet jedoch nicht für Verzögerungen aufgrund höherer Gewalt oder unvorhergesehener Umstände.
+                </p>
+                <p class="text-slate-700 mt-4">
+                    (2) Der Auftraggeber hat dafür Sorge zu tragen, dass der Auftragnehmer zum vereinbarten Termin Zugang zu den zu reinigenden Gegenständen und eine ausreichende Arbeitsfläche hat.
+                </p>
+                <p class="text-slate-700 mt-4">
+                    (3) Bei Terminabsagen durch den Auftraggeber weniger als 24 Stunden vor dem vereinbarten Termin kann der Auftragnehmer eine Aufwandspauschale von bis zu 30€ berechnen.
+                </p>
+            </section>
+            
+            <section>
+                <h2 class="text-xl font-display font-bold text-slate-800 mb-4">§ 5 Preise und Zahlung</h2>
+                <p class="text-slate-700">
+                    (1) Es gelten die zum Zeitpunkt des Vertragsschlusses vereinbarten Preise. Alle Preise verstehen sich inklusive der gesetzlichen Mehrwertsteuer.
+                </p>
+                <p class="text-slate-700 mt-4">
+                    (2) Die Anfahrt innerhalb von Jülich und einem Umkreis von 15 km ist kostenlos. Für weiter entfernte Orte wird eine Anfahrtspauschale von 0,50€ pro Kilometer (einfache Strecke) berechnet.
+                </p>
+                <p class="text-slate-700 mt-4">
+                    (3) Die Zahlung ist unmittelbar nach Erbringung der Leistung fällig. Akzeptierte Zahlungsarten sind Barzahlung, Überweisung und PayPal.
+                </p>
+            </section>
+            
+            <section>
+                <h2 class="text-xl font-display font-bold text-slate-800 mb-4">§ 6 Mitwirkungspflichten des Auftraggebers</h2>
+                <p class="text-slate-700">
+                    (1) Der Auftraggeber hat den Auftragnehmer über Besonderheiten des zu reinigenden Materials zu informieren (z.B. besondere Empfindlichkeiten, vorherige Reinigungsversuche).
+                </p>
+                <p class="text-slate-700 mt-4">
+                    (2) Der Auftraggeber stellt sicher, dass der Arbeitsbereich frei zugänglich ist und ausreichend Platz für die Durchführung der Reinigung vorhanden ist.
+                </p>
+                <p class="text-slate-700 mt-4">
+                    (3) Der Auftraggeber ermöglicht den Zugang zu Strom und Wasser, soweit für die Reinigung erforderlich.
+                </p>
+            </section>
+            
+            <section>
+                <h2 class="text-xl font-display font-bold text-slate-800 mb-4">§ 7 Haftung</h2>
+                <p class="text-slate-700">
+                    (1) Der Auftragnehmer haftet für Schäden, die auf vorsätzlichem oder grob fahrlässigem Verhalten beruhen.
+                </p>
+                <p class="text-slate-700 mt-4">
+                    (2) Bei leichter Fahrlässigkeit haftet der Auftragnehmer nur bei Verletzung wesentlicher Vertragspflichten. Die Haftung ist in diesem Fall auf den vorhersehbaren, vertragstypischen Schaden begrenzt.
+                </p>
+                <p class="text-slate-700 mt-4">
+                    (3) Der Auftragnehmer haftet nicht für Schäden, die entstehen durch:
+                </p>
+                <ul class="list-disc list-inside text-slate-700 mt-2 ml-4">
+                    <li>Bereits vorhandene Beschädigungen am Material</li>
+                    <li>Nicht fachgerechte Vorbehandlung durch den Auftraggeber oder Dritte</li>
+                    <li>Verschweigen von bekannten Materialempfindlichkeiten durch den Auftraggeber</li>
+                    <li>Normale Gebrauchsspuren oder Alterungserscheinungen</li>
+                </ul>
+                <p class="text-slate-700 mt-4">
+                    (4) Etwaige Reklamationen sind unverzüglich, spätestens jedoch innerhalb von 3 Tagen nach Leistungserbringung schriftlich anzuzeigen.
+                </p>
+            </section>
+            
+            <section>
+                <h2 class="text-xl font-display font-bold text-slate-800 mb-4">§ 8 Trocknungszeit</h2>
+                <p class="text-slate-700">
+                    (1) Nach der Reinigung benötigen die gereinigten Gegenstände eine Trocknungszeit von ca. 3-6 Stunden, abhängig von Material, Raumtemperatur und Luftfeuchtigkeit.
+                </p>
+                <p class="text-slate-700 mt-4">
+                    (2) Der Auftraggeber wird darauf hingewiesen, für ausreichende Belüftung zu sorgen, um den Trocknungsprozess zu beschleunigen.
+                </p>
+            </section>
+            
+            <section>
+                <h2 class="text-xl font-display font-bold text-slate-800 mb-4">§ 9 Datenschutz</h2>
+                <p class="text-slate-700">
+                    Die Erhebung und Verarbeitung personenbezogener Daten erfolgt gemäß unserer Datenschutzerklärung, die auf unserer Website einsehbar ist.
+                </p>
+            </section>
+            
+            <section>
+                <h2 class="text-xl font-display font-bold text-slate-800 mb-4">§ 10 Schlussbestimmungen</h2>
+                <p class="text-slate-700">
+                    (1) Es gilt das Recht der Bundesrepublik Deutschland.
+                </p>
+                <p class="text-slate-700 mt-4">
+                    (2) Sollten einzelne Bestimmungen dieser AGB unwirksam sein oder werden, bleibt die Wirksamkeit der übrigen Bestimmungen unberührt.
+                </p>
+                <p class="text-slate-700 mt-4">
+                    (3) Änderungen und Ergänzungen dieser AGB bedürfen der Schriftform.
+                </p>
+            </section>
+            
+        </div>
+        
+        <p class="text-slate-500 text-sm mt-8 text-center">
+            Stand: Dezember 2025
+        </p>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-white py-8 mt-16">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            <p class="text-slate-400">© 2025 Polsterreinigung Jülich. Alle Rechte vorbehalten.</p>
+            <div class="mt-4 space-x-4">
+                <a href="impressum.html" class="text-slate-400 hover:text-white">Impressum</a>
+                <a href="datenschutz.html" class="text-slate-400 hover:text-white">Datenschutz</a>
+                <a href="agb.html" class="text-slate-400 hover:text-white">AGB</a>
+                <a href="cookies.html" class="text-slate-400 hover:text-white">Cookies</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="assets/js/wow-effects.js"></script>
+</body>
+</html>
