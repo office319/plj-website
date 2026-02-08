@@ -1,0 +1,31 @@
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Editor files
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# Environment
+.env
+.env.local
+.env.production
+
+# Node (if ever needed)
+node_modules/
+package-lock.json
+
+# Build artifacts
+dist/
+build/
+
+# Logs
+*.log
+
+# Temp files
+*.tmp
+*.bak
