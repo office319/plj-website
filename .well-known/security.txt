@@ -1,0 +1,5 @@
+Contact: https://polsterreinigungjuelich.de/impressum.html
+Expires: 2027-04-21T00:00:00.000Z
+Preferred-Languages: de, pl, en
+Canonical: https://polsterreinigungjuelich.de/.well-known/security.txt
+Policy: https://polsterreinigungjuelich.de/datenschutz.html

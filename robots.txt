@@ -1,7 +1,3 @@
 User-agent: *
 Allow: /
-
-Disallow: /impressum.html
-Disallow: /datenschutz.html
-
 Sitemap: https://polsterreinigungjuelich.de/sitemap.xml
