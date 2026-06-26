@@ -14,6 +14,8 @@
 
 <IfModule mod_rewrite.c>
     RewriteEngine On
+    RewriteCond %{HTTP_HOST} ^www\.polsterreinigungjuelich\.de$ [NC]
+    RewriteRule ^(.*)$ https://polsterreinigungjuelich.de/$1 [L,R=301]
     RewriteCond %{HTTPS} off
     RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 </IfModule>
