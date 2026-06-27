@@ -1,18 +1,50 @@
 <?php
 declare(strict_types=1);
 
-function redirect_with_status(string $status)
+function wants_json(): bool
+{
+    $accept = (string)($_SERVER['HTTP_ACCEPT'] ?? '');
+    $requestedWith = strtolower((string)($_SERVER['HTTP_X_REQUESTED_WITH'] ?? ''));
+    return str_contains($accept, 'application/json') || $requestedWith === 'xmlhttprequest';
+}
+
+function status_message(string $status): string
+{
+    if ($status === 'ok') {
+        return 'Danke, Ihre Anfrage wurde gesendet. Wir melden uns schnellstmöglich mit einem Angebot.';
+    }
+    return 'Die Anfrage konnte nicht gesendet werden. Bitte prüfen Sie Ihre Angaben oder schreiben Sie uns direkt per WhatsApp.';
+}
+
+function finish_with_status(string $status, array $extra = []): void
+{
+    if (wants_json()) {
+        $ok = $status === 'ok';
+        http_response_code($ok ? 200 : 422);
+        header('Content-Type: application/json; charset=UTF-8');
+        echo json_encode(array_merge([
+            'ok' => $ok,
+            'status' => $status,
+            'message' => status_message($status),
+        ], $extra), JSON_UNESCAPED_UNICODE);
+        exit;
+    }
+
+    redirect_with_status($status);
+}
+
+function redirect_with_status(string $status): void
 {
     header('Location: /?anfrage=' . rawurlencode($status) . '#kontakt', true, 303);
     exit;
 }
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    redirect_with_status('fehler');
+    finish_with_status('fehler');
 }
 
 if (!empty($_POST['website'] ?? '')) {
-    redirect_with_status('ok');
+    finish_with_status('ok');
 }
 
 $name = trim((string)($_POST['name'] ?? ''));
@@ -24,11 +56,19 @@ $message = trim((string)($_POST['message'] ?? ''));
 $privacy = isset($_POST['privacy']);
 
 if ($name === '' || $location === '' || $service === '' || $message === '' || !$privacy) {
-    redirect_with_status('fehler');
+    finish_with_status('fehler');
 }
 
 if ($email !== '' && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-    redirect_with_status('fehler');
+    finish_with_status('fehler');
+}
+
+$isTestMode = !empty($_POST['is_test']) || (($_SERVER['HTTP_X_NF_FORMS_TEST'] ?? '') === '1');
+if ($isTestMode) {
+    finish_with_status('ok', [
+        'test_mode' => true,
+        'side_effects_skipped' => true,
+    ]);
 }
 
 $recipient = 'kontakt@polsterreinigungjuelich.de';
@@ -70,18 +110,18 @@ if (!empty($_FILES['photos']) && is_array($_FILES['photos']['name'])) {
             continue;
         }
         if ($error !== UPLOAD_ERR_OK) {
-            redirect_with_status('fehler');
+            finish_with_status('fehler');
         }
 
         $tmpName = (string)($_FILES['photos']['tmp_name'][$i] ?? '');
         $size = (int)($_FILES['photos']['size'][$i] ?? 0);
         if ($tmpName === '' || $size <= 0 || $size > $maxFileSize || !is_uploaded_file($tmpName)) {
-            redirect_with_status('fehler');
+            finish_with_status('fehler');
         }
 
         $mime = function_exists('mime_content_type') ? (string)mime_content_type($tmpName) : '';
         if (!isset($allowedTypes[$mime])) {
-            redirect_with_status('fehler');
+            finish_with_status('fehler');
         }
 
         $originalName = (string)($_FILES['photos']['name'][$i] ?? ('foto-' . ($i + 1) . '.' . $allowedTypes[$mime]));
@@ -107,7 +147,7 @@ $headers = [
 if ($attachments === []) {
     $headers[] = 'Content-Type: text/plain; charset=UTF-8';
     $sent = mail($recipient, $subject, $textBody, implode("\r\n", $headers));
-    redirect_with_status($sent ? 'ok' : 'fehler');
+    finish_with_status($sent ? 'ok' : 'fehler');
 }
 
 $boundary = 'plj-' . bin2hex(random_bytes(16));
@@ -131,4 +171,4 @@ foreach ($attachments as $attachment) {
 $messageParts[] = '--' . $boundary . "--\r\n";
 
 $sent = mail($recipient, $subject, implode('', $messageParts), implode("\r\n", $headers));
-redirect_with_status($sent ? 'ok' : 'fehler');
+finish_with_status($sent ? 'ok' : 'fehler');

@@ -1092,11 +1092,11 @@
             <div class="grid lg:grid-cols-2 gap-12">
                 <!-- Contact Form -->
                 <div class="bg-white rounded-3xl p-8 md:p-10 shadow-2xl">
-                    <form id="lead-form" action="contact.php" method="POST" enctype="multipart/form-data" class="space-y-6">
-                        <div id="form-success" class="hidden rounded-2xl bg-fresh-50 border border-fresh-200 text-fresh-800 px-4 py-3 text-sm">
+                    <form id="lead-form" action="contact.php" method="POST" enctype="multipart/form-data" class="space-y-6" novalidate>
+                        <div id="form-success" class="hidden rounded-2xl bg-fresh-50 border border-fresh-200 text-fresh-800 px-4 py-3 text-sm" role="status" aria-live="polite">
                             Danke, Ihre Anfrage ist angekommen. Wir melden uns schnellstmöglich mit Rückfragen oder einem Angebot.
                         </div>
-                        <div id="form-error" class="hidden rounded-2xl bg-red-50 border border-red-200 text-red-700 px-4 py-3 text-sm">
+                        <div id="form-error" class="hidden rounded-2xl bg-red-50 border border-red-200 text-red-700 px-4 py-3 text-sm" role="alert" aria-live="assertive">
                             Die Anfrage konnte nicht gesendet werden. Bitte schreiben Sie uns direkt per WhatsApp.
                         </div>
                         <input type="text" name="website" tabindex="-1" autocomplete="off" class="hidden" aria-hidden="true">
@@ -1132,6 +1132,7 @@
                         <div>
                             <label for="photos" class="block text-sm font-medium text-slate-700 mb-2">Fotos hochladen</label>
                             <input type="file" id="photos" name="photos[]" multiple accept="image/jpeg,image/png,image/webp" class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white focus:border-clean-500 focus:ring-2 focus:ring-clean-500/20 transition outline-none">
+                            <p id="photos-summary" class="hidden text-xs text-fresh-700 mt-2"></p>
                             <p class="text-xs text-slate-500 mt-2">Optional, aber empfohlen: 1-4 Fotos helfen beim fairen Festpreis. Max. 5 MB pro Bild.</p>
                         </div>
                         <div>
@@ -1142,9 +1143,10 @@
                             <input type="checkbox" name="privacy" required class="mt-1 rounded border-slate-300 text-clean-600 focus:ring-clean-500">
                             <span>Ich stimme zu, dass meine Angaben zur Bearbeitung der Anfrage gespeichert und beantwortet werden. Details stehen in der <a href="datenschutz.html" class="text-clean-600 hover:underline">Datenschutzerklärung</a>.</span>
                         </label>
-                        <button type="submit" class="w-full bg-gradient-to-r from-clean-500 to-fresh-500 text-white py-4 rounded-xl font-bold text-lg hover:shadow-lg hover:shadow-clean-500/30 transition duration-300">
-                            Anfrage mit Fotos senden
+                        <button id="lead-submit" type="submit" class="w-full bg-gradient-to-r from-clean-500 to-fresh-500 text-white py-4 rounded-xl font-bold text-lg hover:shadow-lg hover:shadow-clean-500/30 transition duration-300 disabled:cursor-not-allowed disabled:opacity-80">
+                            <span id="lead-submit-label">Anfrage mit Fotos senden</span>
                         </button>
+                        <div id="form-inline-status" class="hidden rounded-2xl px-4 py-3 text-sm font-medium" role="status" aria-live="polite"></div>
                         <p class="text-xs text-slate-500 text-center">Teppiche bieten wir aktuell nicht als reguläre Dienstleistung an.</p>
                     </form>
                 </div>
@@ -1329,18 +1331,6 @@
             (window.plausible.q = window.plausible.q || []).push(arguments);
         };
 
-        const urlParams = new URLSearchParams(window.location.search);
-        const formSuccess = document.getElementById('form-success');
-        const formError = document.getElementById('form-error');
-        if (urlParams.get('anfrage') === 'ok') {
-            formSuccess?.classList.remove('hidden');
-            window.plausible('form_submit_success', { props: { form: 'polsterreinigung_contact' } });
-        }
-        if (urlParams.get('anfrage') === 'fehler') {
-            formError?.classList.remove('hidden');
-            window.plausible('form_submit_error', { props: { form: 'polsterreinigung_contact' } });
-        }
-
         document.querySelectorAll('a[href^="https://wa.me/"]').forEach(link => {
             link.addEventListener('click', () => {
                 window.plausible('whatsapp_click', { props: { location: link.dataset.trackLocation || 'unknown' } });
@@ -1358,14 +1348,208 @@
         });
 
         const leadForm = document.getElementById('lead-form');
+        const formSuccess = document.getElementById('form-success');
+        const formError = document.getElementById('form-error');
+        const formInlineStatus = document.getElementById('form-inline-status');
+        const submitButton = document.getElementById('lead-submit');
+        const submitLabel = document.getElementById('lead-submit-label');
+        const photosInput = document.getElementById('photos');
+        const photosSummary = document.getElementById('photos-summary');
+        const submitDefaultLabel = submitLabel?.textContent || 'Anfrage mit Fotos senden';
+        let isSubmitting = false;
         let formStarted = false;
+
+        function setBox(el, type, message) {
+            if (!el) return;
+            el.textContent = message;
+            el.className = type === 'success'
+                ? 'rounded-2xl bg-fresh-50 border border-fresh-200 text-fresh-800 px-4 py-3 text-sm'
+                : 'rounded-2xl bg-red-50 border border-red-200 text-red-700 px-4 py-3 text-sm';
+            el.classList.remove('hidden');
+        }
+
+        function setInlineStatus(type, message) {
+            if (!formInlineStatus) return;
+            formInlineStatus.textContent = message;
+            formInlineStatus.className = type === 'success'
+                ? 'rounded-2xl px-4 py-3 text-sm font-medium bg-fresh-50 border border-fresh-200 text-fresh-800'
+                : type === 'sending'
+                    ? 'rounded-2xl px-4 py-3 text-sm font-medium bg-clean-50 border border-clean-200 text-clean-800'
+                    : 'rounded-2xl px-4 py-3 text-sm font-medium bg-red-50 border border-red-200 text-red-700';
+            formInlineStatus.classList.remove('hidden');
+        }
+
+        function clearFormMessages() {
+            formSuccess?.classList.add('hidden');
+            formError?.classList.add('hidden');
+            formInlineStatus?.classList.add('hidden');
+        }
+
+        function setInvalid(field) {
+            field?.setAttribute('aria-invalid', 'true');
+            field?.classList.add('border-red-400', 'ring-2', 'ring-red-100');
+        }
+
+        function clearInvalid(field) {
+            field?.removeAttribute('aria-invalid');
+            field?.classList.remove('border-red-400', 'ring-2', 'ring-red-100');
+        }
+
+        function updatePhotosSummary() {
+            if (!photosInput || !photosSummary) return;
+            const files = Array.from(photosInput.files || []);
+            if (!files.length) {
+                photosSummary.classList.add('hidden');
+                photosSummary.textContent = '';
+                return;
+            }
+            const names = files.map(file => file.name).slice(0, 4).join(', ');
+            photosSummary.textContent = `${files.length} Foto${files.length === 1 ? '' : 's'} ausgewählt: ${names}`;
+            photosSummary.classList.remove('hidden');
+        }
+
+        function validateLeadForm() {
+            if (!leadForm) return false;
+            clearFormMessages();
+            leadForm.querySelectorAll('[aria-invalid="true"]').forEach(clearInvalid);
+
+            const name = leadForm.elements.name;
+            const email = leadForm.elements.email;
+            const location = leadForm.elements.location;
+            const service = leadForm.elements.service;
+            const message = leadForm.elements.message;
+            const privacy = leadForm.elements.privacy;
+            const files = Array.from(photosInput?.files || []);
+            const allowedFileTypes = ['image/jpeg', 'image/png', 'image/webp'];
+            const maxFileSize = 5 * 1024 * 1024;
+
+            const checks = [
+                [name, !name.value.trim(), 'Bitte geben Sie Ihren Namen ein.'],
+                [email, !email.value.trim(), 'Bitte geben Sie Ihre E-Mail-Adresse ein.'],
+                [email, email.value.trim() && !email.validity.valid, 'Bitte geben Sie eine gültige E-Mail-Adresse ein.'],
+                [location, !location.value.trim(), 'Bitte geben Sie Ihren Ort oder Stadtteil ein.'],
+                [service, !service.value, 'Bitte wählen Sie aus, was gereinigt werden soll.'],
+                [message, !message.value.trim(), 'Bitte beschreiben Sie kurz, was gereinigt werden soll.'],
+                [privacy, !privacy.checked, 'Bitte stimmen Sie der Datenschutzerklärung zu.'],
+            ];
+
+            for (const [field, failed, text] of checks) {
+                if (failed) {
+                    setInvalid(field);
+                    setBox(formError, 'error', text);
+                    setInlineStatus('error', text);
+                    field?.focus({ preventScroll: false });
+                    return false;
+                }
+            }
+
+            if (files.length > 4) {
+                const text = 'Bitte wählen Sie maximal 4 Fotos aus.';
+                setInvalid(photosInput);
+                setBox(formError, 'error', text);
+                setInlineStatus('error', text);
+                photosInput?.focus({ preventScroll: false });
+                return false;
+            }
+
+            for (const file of files) {
+                if (!allowedFileTypes.includes(file.type) || file.size > maxFileSize) {
+                    const text = 'Bitte laden Sie nur JPG, PNG oder WebP Fotos bis 5 MB pro Bild hoch.';
+                    setInvalid(photosInput);
+                    setBox(formError, 'error', text);
+                    setInlineStatus('error', text);
+                    photosInput?.focus({ preventScroll: false });
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        function setSubmittingState() {
+            isSubmitting = true;
+            submitButton.disabled = true;
+            submitButton.setAttribute('aria-busy', 'true');
+            submitLabel.textContent = 'Wird gesendet...';
+            setInlineStatus('sending', 'Ihre Anfrage wird gerade gesendet. Bitte warten Sie kurz.');
+        }
+
+        function setIdleState() {
+            isSubmitting = false;
+            submitButton.disabled = false;
+            submitButton.removeAttribute('aria-busy');
+            submitLabel.textContent = submitDefaultLabel;
+        }
+
+        function setSuccessState(message) {
+            submitButton.disabled = true;
+            submitButton.removeAttribute('aria-busy');
+            submitLabel.textContent = 'Anfrage gesendet';
+            setBox(formSuccess, 'success', message);
+            setInlineStatus('success', message);
+        }
+
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('anfrage') === 'ok') {
+            const message = 'Danke, Ihre Anfrage wurde gesendet. Wir melden uns schnellstmöglich mit einem Angebot.';
+            setBox(formSuccess, 'success', message);
+            setInlineStatus('success', message);
+            window.plausible('form_submit_success', { props: { form: 'polsterreinigung_contact', mode: 'redirect_fallback' } });
+            window.history.replaceState(null, '', `${window.location.pathname}${window.location.hash || ''}`);
+        }
+        if (urlParams.get('anfrage') === 'fehler') {
+            const message = 'Die Anfrage konnte nicht gesendet werden. Bitte prüfen Sie Ihre Angaben oder schreiben Sie uns direkt per WhatsApp.';
+            setBox(formError, 'error', message);
+            setInlineStatus('error', message);
+            window.plausible('form_submit_error', { props: { form: 'polsterreinigung_contact', mode: 'redirect_fallback' } });
+            window.history.replaceState(null, '', `${window.location.pathname}${window.location.hash || ''}`);
+        }
+
+        photosInput?.addEventListener('change', () => {
+            clearInvalid(photosInput);
+            updatePhotosSummary();
+        });
+
         leadForm?.addEventListener('input', () => {
             if (formStarted) return;
             formStarted = true;
             window.plausible('form_start', { props: { form: 'polsterreinigung_contact' } });
         });
-        leadForm?.addEventListener('submit', () => {
+        leadForm?.addEventListener('submit', async event => {
+            event.preventDefault();
+            if (isSubmitting) return;
             window.plausible('form_submit_attempt', { props: { form: 'polsterreinigung_contact' } });
+            if (!validateLeadForm()) {
+                window.plausible('form_validation_error', { props: { form: 'polsterreinigung_contact' } });
+                return;
+            }
+
+            setSubmittingState();
+            try {
+                const response = await fetch(leadForm.action, {
+                    method: 'POST',
+                    body: new FormData(leadForm),
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest',
+                    },
+                });
+                const data = await response.json().catch(() => null);
+                if (!response.ok || !data?.ok) {
+                    throw new Error(data?.message || 'submit_failed');
+                }
+                const message = data.message || 'Danke, Ihre Anfrage wurde gesendet. Wir melden uns schnellstmöglich mit einem Angebot.';
+                leadForm.reset();
+                updatePhotosSummary();
+                setSuccessState(message);
+                window.plausible('form_submit_success', { props: { form: 'polsterreinigung_contact', mode: 'ajax' } });
+            } catch (error) {
+                const message = 'Die Anfrage konnte nicht gesendet werden. Bitte schreiben Sie uns direkt per WhatsApp oder rufen Sie uns an.';
+                setBox(formError, 'error', message);
+                setInlineStatus('error', message);
+                setIdleState();
+                window.plausible('form_submit_error', { props: { form: 'polsterreinigung_contact', mode: 'ajax' } });
+            }
         });
     </script>
 
