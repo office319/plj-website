@@ -164,19 +164,6 @@ function build_html_mail(array $data): string
         . '</td></tr></table></body></html>';
 }
 
-function add_alternative_parts(array &$parts, string $boundary, string $textBody, string $htmlBody): void
-{
-    $parts[] = '--' . $boundary . "\r\n"
-        . "Content-Type: text/plain; charset=UTF-8\r\n"
-        . "Content-Transfer-Encoding: 8bit\r\n\r\n"
-        . $textBody . "\r\n";
-
-    $parts[] = '--' . $boundary . "\r\n"
-        . "Content-Type: text/html; charset=UTF-8\r\n"
-        . "Content-Transfer-Encoding: 8bit\r\n\r\n"
-        . $htmlBody . "\r\n";
-}
-
 function attachment_log_data(array $attachments): array
 {
     return array_map(static function (array $attachment): array {
@@ -184,6 +171,18 @@ function attachment_log_data(array $attachments): array
             'name' => $attachment['name'] ?? '',
             'type' => $attachment['type'] ?? '',
             'size' => $attachment['size'] ?? 0,
+        ];
+    }, $attachments);
+}
+
+function attachment_relay_data(array $attachments): array
+{
+    return array_map(static function (array $attachment): array {
+        return [
+            'name' => $attachment['name'] ?? '',
+            'type' => $attachment['type'] ?? '',
+            'size' => $attachment['size'] ?? 0,
+            'content_base64' => preg_replace('/\s+/', '', (string)($attachment['content'] ?? '')),
         ];
     }, $attachments);
 }
@@ -201,6 +200,7 @@ function append_lead_archive(array $data, array $attachments, array $delivery): 
         'source' => 'polsterreinigungjuelich.de/contact.php',
         'status' => 'received',
         'data' => [
+            'lead_id' => $data['lead_id'] ?? '',
             'name' => $data['name'],
             'email' => $data['email'],
             'phone' => $data['phone'],
@@ -233,27 +233,77 @@ function append_lead_archive(array $data, array $attachments, array $delivery): 
     @chmod($archiveFile, 0640);
 }
 
-function send_mail_to_recipients(array $recipients, string $subject, string $message, array $headers): array
+function make_lead_id(): string
 {
-    $results = [];
-    foreach (array_values(array_unique($recipients)) as $recipient) {
-        $accepted = mail($recipient, $subject, $message, implode("\r\n", $headers));
-        $results[] = [
-            'recipient' => $recipient,
-            'accepted' => $accepted,
-        ];
+    try {
+        $suffix = substr(bin2hex(random_bytes(4)), 0, 6);
+    } catch (Throwable $error) {
+        $suffix = substr(hash('sha256', microtime(true) . ($_SERVER['REMOTE_ADDR'] ?? '')), 0, 6);
     }
-    return $results;
+
+    return 'PLJ-' . gmdate('Ymd-His') . '-' . $suffix;
 }
 
-function any_mail_accepted(array $delivery): bool
+function relay_token(): string
 {
-    foreach ($delivery as $result) {
-        if (!empty($result['accepted'])) {
-            return true;
+    $path = dirname(__DIR__) . '/lead_logs/relay_token.txt';
+    if (!is_readable($path)) {
+        return '';
+    }
+    return trim((string)file_get_contents($path));
+}
+
+function post_relay(array $payload): array
+{
+    $token = relay_token();
+    if ($token === '') {
+        return [
+            'transport' => 'app_naszefirmy_smtp_relay',
+            'ok' => false,
+            'status' => 0,
+            'error' => 'relay_token_missing',
+        ];
+    }
+
+    $json = json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    if ($json === false) {
+        return [
+            'transport' => 'app_naszefirmy_smtp_relay',
+            'ok' => false,
+            'status' => 0,
+            'error' => 'relay_json_failed',
+        ];
+    }
+
+    $context = stream_context_create([
+        'http' => [
+            'method' => 'POST',
+            'header' => "Content-Type: application/json\r\nAccept: application/json\r\nX-NF-Relay-Token: " . $token . "\r\n",
+            'content' => $json,
+            'timeout' => 20,
+            'ignore_errors' => true,
+        ],
+    ]);
+
+    $body = @file_get_contents('https://app.naszefirmy.de/polsterreinigung-juelich/lead', false, $context);
+    $status = 0;
+    foreach (($http_response_header ?? []) as $header) {
+        if (preg_match('/^HTTP\/\S+\s+(\d+)/', $header, $matches)) {
+            $status = (int)$matches[1];
+            break;
         }
     }
-    return false;
+
+    $decoded = is_string($body) ? json_decode($body, true) : null;
+    $ok = $status >= 200 && $status < 300 && is_array($decoded) && !empty($decoded['ok']);
+
+    return [
+        'transport' => 'app_naszefirmy_smtp_relay',
+        'ok' => $ok,
+        'status' => $status,
+        'error' => is_array($decoded) && isset($decoded['error']) ? (string)$decoded['error'] : '',
+        'lead_id' => is_array($decoded) && isset($decoded['lead_id']) ? (string)$decoded['lead_id'] : '',
+    ];
 }
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -288,17 +338,15 @@ if ($isTestMode) {
     ]);
 }
 
-$recipients = [
-    'kontakt@polsterreinigungjuelich.de',
-    'office@selfdevelopment.team',
-];
 $subject = 'Neue Anfrage Polsterreinigung Juelich';
 $from = 'kontakt@polsterreinigungjuelich.de';
 $safeReplyTo = $email !== '' ? $email : $from;
+$leadId = make_lead_id();
 
 $bodyLines = [
     'Neue Anfrage ueber polsterreinigungjuelich.de',
     '',
+    'Lead ID: ' . $leadId,
     'Name: ' . $name,
     'E-Mail: ' . ($email !== '' ? $email : '-'),
     'Telefon: ' . ($phone !== '' ? $phone : '-'),
@@ -359,14 +407,8 @@ if (!empty($_FILES['photos']) && is_array($_FILES['photos']['name'])) {
     }
 }
 
-$headers = [
-    'From: Polsterreinigung Juelich <' . $from . '>',
-    'Reply-To: ' . $safeReplyTo,
-    'MIME-Version: 1.0',
-    'X-Mailer: PHP/' . PHP_VERSION,
-];
-
 $mailData = [
+    'lead_id' => $leadId,
     'name' => $name,
     'email' => $email,
     'phone' => $phone,
@@ -378,40 +420,28 @@ $mailData = [
 ];
 $htmlBody = build_html_mail($mailData);
 
-if ($attachments === []) {
-    $alternativeBoundary = 'plj-alt-' . bin2hex(random_bytes(12));
-    $headers[] = 'Content-Type: multipart/alternative; boundary="' . $alternativeBoundary . '"';
+$relay = post_relay([
+    'lead_id' => $leadId,
+    'submitted_at' => date('c'),
+    'subject' => $subject,
+    'plain' => $textBody,
+    'html' => $htmlBody,
+    'reply_to' => $safeReplyTo,
+    'consent' => $privacy ? '1' : '0',
+    'website' => (string)($_POST['website'] ?? ''),
+    'data' => [
+        'name' => $name,
+        'email' => $email,
+        'phone' => $phone,
+        'location' => $location,
+        'service' => $service,
+        'message' => $message,
+    ],
+    'attachments' => attachment_relay_data($attachments),
+]);
 
-    $messageParts = [];
-    add_alternative_parts($messageParts, $alternativeBoundary, $textBody, $htmlBody);
-    $messageParts[] = '--' . $alternativeBoundary . "--\r\n";
-
-    $delivery = send_mail_to_recipients($recipients, $subject, implode('', $messageParts), $headers);
-    append_lead_archive($mailData, $attachments, $delivery);
-    finish_with_status(any_mail_accepted($delivery) ? 'ok' : 'fehler');
-}
-
-$boundary = 'plj-' . bin2hex(random_bytes(16));
-$alternativeBoundary = 'plj-alt-' . bin2hex(random_bytes(12));
-$headers[] = 'Content-Type: multipart/mixed; boundary="' . $boundary . '"';
-
-$messageParts = [];
-$messageParts[] = '--' . $boundary . "\r\n"
-    . 'Content-Type: multipart/alternative; boundary="' . $alternativeBoundary . '"' . "\r\n\r\n";
-
-add_alternative_parts($messageParts, $alternativeBoundary, $textBody, $htmlBody);
-$messageParts[] = '--' . $alternativeBoundary . "--\r\n";
-
-foreach ($attachments as $attachment) {
-    $messageParts[] = '--' . $boundary . "\r\n"
-        . 'Content-Type: ' . $attachment['type'] . '; name="' . $attachment['name'] . '"' . "\r\n"
-        . 'Content-Disposition: attachment; filename="' . $attachment['name'] . '"' . "\r\n"
-        . "Content-Transfer-Encoding: base64\r\n\r\n"
-        . $attachment['content'] . "\r\n";
-}
-
-$messageParts[] = '--' . $boundary . "--\r\n";
-
-$delivery = send_mail_to_recipients($recipients, $subject, implode('', $messageParts), $headers);
-append_lead_archive($mailData, $attachments, $delivery);
-finish_with_status(any_mail_accepted($delivery) ? 'ok' : 'fehler');
+append_lead_archive($mailData, $attachments, [$relay]);
+finish_with_status(!empty($relay['ok']) ? 'ok' : 'fehler', [
+    'lead_id' => $leadId,
+    'mail_transport' => 'app_naszefirmy_smtp_relay',
+]);
