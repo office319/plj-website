@@ -223,10 +223,14 @@ function append_lead_archive(array $data, array $attachments, array $delivery): 
         return;
     }
 
-    $written = file_put_contents($archiveDir . '/leads.jsonl', $encoded . "\n", FILE_APPEND | LOCK_EX);
+    $archiveFile = $archiveDir . '/leads.jsonl';
+    $written = file_put_contents($archiveFile, $encoded . "\n", FILE_APPEND | LOCK_EX);
     if ($written === false) {
         error_log('PLJ lead archive: write failed');
+        return;
     }
+
+    @chmod($archiveFile, 0640);
 }
 
 function send_mail_to_recipients(array $recipients, string $subject, string $message, array $headers): array
