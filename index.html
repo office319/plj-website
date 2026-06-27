@@ -10,7 +10,7 @@
     <!-- Open Graph -->
     <meta property="og:title" content="Polsterreinigung Jülich | Tiefenreine Sauberkeit">
     <meta property="og:description" content="Professionelle Polsterreinigung für Sofa, Sessel, Eckcouch und Autositze. Vor Ort in Jülich und Umgebung.">
-    <meta property="og:image" content="images/polster-hero.png">
+    <meta property="og:image" content="https://polsterreinigungjuelich.de/assets/images/polster-hero.png">
     <meta property="og:url" content="https://polsterreinigungjuelich.de">
     <meta property="og:type" content="website">
     
@@ -65,6 +65,10 @@
     <style>
         * {
             scroll-behavior: smooth;
+        }
+
+        [id], #lead-form {
+            scroll-margin-top: 7rem;
         }
         
         body {
@@ -236,26 +240,48 @@
         #cookieBanner {
             display: none;
             position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
+            bottom: 16px;
+            left: 16px;
+            right: 16px;
             background: linear-gradient(135deg, #003a3d 0%, #004e52 100%);
             color: white;
-            padding: 20px;
+            padding: 14px 16px;
             z-index: 9999;
             flex-wrap: wrap;
-            gap: 16px;
+            gap: 12px;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 -4px 20px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.14);
+            border-radius: 22px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.26);
+            max-width: 880px;
+            margin: 0 auto;
         }
-        #cookieBanner p { margin: 0; max-width: 600px; font-size: 14px; line-height: 1.5; }
+        #cookieBanner p { margin: 0; max-width: 520px; font-size: 13px; line-height: 1.45; }
         #cookieBanner a { color: #81B4B9; text-decoration: underline; }
-        #cookieBanner button { padding: 10px 24px; border-radius: 9999px; font-weight: 600; cursor: pointer; transition: all 0.2s; border: none; }
+        #cookieBanner button { padding: 9px 18px; border-radius: 9999px; font-weight: 700; cursor: pointer; transition: all 0.2s; border: none; }
         #cookieBanner .accept { background: #14b8a6; color: white; }
         #cookieBanner .accept:hover { background: #0d9488; }
         #cookieBanner .decline { background: transparent; color: white; border: 1px solid rgba(255,255,255,0.3); }
         #cookieBanner .decline:hover { background: rgba(255,255,255,0.1); }
+        @media (max-width: 640px) {
+            #cookieBanner {
+                bottom: 10px;
+                left: 10px;
+                right: 10px;
+                padding: 10px 12px;
+                gap: 8px;
+                justify-content: flex-start;
+            }
+            #cookieBanner p {
+                font-size: 11px;
+                line-height: 1.35;
+            }
+            #cookieBanner button {
+                padding: 7px 14px;
+                font-size: 13px;
+            }
+        }
     </style>
 <script defer data-domain="polsterreinigungjuelich.de" src="https://analytics.selfdevelopment.team/js/script.outbound-links.file-downloads.tagged-events.js"></script>
 <link rel="canonical" href="https://polsterreinigungjuelich.de/">
@@ -267,7 +293,7 @@
 
     <!-- Cookie Consent Banner -->
     <div id="cookieBanner">
-        <p>🍪 Diese Website nutzt optionale Statistik-Cookies, damit wir Anfragen und Inhalte verbessern können.
+        <p>Optionale Statistik-Cookies zur Verbesserung von Anfragen und Inhalten.
            <a href="cookies.html">Mehr erfahren</a></p>
         <div style="display: flex; gap: 12px; flex-wrap: wrap;">
             <button class="accept" onclick="acceptCookies()">Akzeptieren</button>
@@ -335,7 +361,7 @@
                             <span class="text-yellow-400">★★★★★</span> 5.0 bei Google
                         </span>
                         <span class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm text-white/90 px-4 py-2 rounded-full text-sm font-medium">
-                            🚗 Gratis Anfahrt
+                            🚗 Gratis Anfahrt im Nahbereich
                         </span>
                         <span class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm text-white/90 px-4 py-2 rounded-full text-sm font-medium">
                             📷 Angebot nach Foto
@@ -355,7 +381,7 @@
                     
                     <!-- CTA Buttons -->
                     <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                        <a href="#kontakt" class="group inline-flex items-center justify-center gap-3 bg-white text-slate-800 px-8 py-4 rounded-full font-bold text-lg hover:bg-clean-50 transition-all duration-300 shadow-2xl hover:shadow-white/20 shine">
+                        <a href="#lead-form" class="group inline-flex items-center justify-center gap-3 bg-white text-slate-800 px-8 py-4 rounded-full font-bold text-lg hover:bg-clean-50 transition-all duration-300 shadow-2xl hover:shadow-white/20 shine">
                             <span>Foto senden & Festpreis bekommen</span>
                             <svg class="w-5 h-5 floating group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
