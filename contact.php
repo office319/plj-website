@@ -177,6 +177,81 @@ function add_alternative_parts(array &$parts, string $boundary, string $textBody
         . $htmlBody . "\r\n";
 }
 
+function attachment_log_data(array $attachments): array
+{
+    return array_map(static function (array $attachment): array {
+        return [
+            'name' => $attachment['name'] ?? '',
+            'type' => $attachment['type'] ?? '',
+            'size' => $attachment['size'] ?? 0,
+        ];
+    }, $attachments);
+}
+
+function append_lead_archive(array $data, array $attachments, array $delivery): void
+{
+    $archiveDir = dirname(__DIR__) . '/lead_logs';
+    if (!is_dir($archiveDir) && !mkdir($archiveDir, 0750, true) && !is_dir($archiveDir)) {
+        error_log('PLJ lead archive: could not create directory');
+        return;
+    }
+
+    $record = [
+        'created_at' => date('c'),
+        'source' => 'polsterreinigungjuelich.de/contact.php',
+        'status' => 'received',
+        'data' => [
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'phone' => $data['phone'],
+            'location' => $data['location'],
+            'service' => $data['service'],
+            'message' => $data['message'],
+            'attachment_count' => $data['attachment_count'],
+        ],
+        'attachments' => attachment_log_data($attachments),
+        'delivery' => $delivery,
+        'request' => [
+            'ip' => $_SERVER['REMOTE_ADDR'] ?? '',
+            'user_agent' => $_SERVER['HTTP_USER_AGENT'] ?? '',
+        ],
+    ];
+
+    $encoded = json_encode($record, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    if ($encoded === false) {
+        error_log('PLJ lead archive: json encode failed');
+        return;
+    }
+
+    $written = file_put_contents($archiveDir . '/leads.jsonl', $encoded . "\n", FILE_APPEND | LOCK_EX);
+    if ($written === false) {
+        error_log('PLJ lead archive: write failed');
+    }
+}
+
+function send_mail_to_recipients(array $recipients, string $subject, string $message, array $headers): array
+{
+    $results = [];
+    foreach (array_values(array_unique($recipients)) as $recipient) {
+        $accepted = mail($recipient, $subject, $message, implode("\r\n", $headers));
+        $results[] = [
+            'recipient' => $recipient,
+            'accepted' => $accepted,
+        ];
+    }
+    return $results;
+}
+
+function any_mail_accepted(array $delivery): bool
+{
+    foreach ($delivery as $result) {
+        if (!empty($result['accepted'])) {
+            return true;
+        }
+    }
+    return false;
+}
+
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     finish_with_status('fehler');
 }
@@ -209,7 +284,10 @@ if ($isTestMode) {
     ]);
 }
 
-$recipient = 'kontakt@polsterreinigungjuelich.de';
+$recipients = [
+    'kontakt@polsterreinigungjuelich.de',
+    'office@selfdevelopment.team',
+];
 $subject = 'Neue Anfrage Polsterreinigung Juelich';
 $from = 'kontakt@polsterreinigungjuelich.de';
 $safeReplyTo = $email !== '' ? $email : $from;
@@ -271,6 +349,7 @@ if (!empty($_FILES['photos']) && is_array($_FILES['photos']['name'])) {
         $attachments[] = [
             'name' => $baseName,
             'type' => $mime,
+            'size' => $size,
             'content' => chunk_split(base64_encode((string)file_get_contents($tmpName))),
         ];
     }
@@ -303,8 +382,9 @@ if ($attachments === []) {
     add_alternative_parts($messageParts, $alternativeBoundary, $textBody, $htmlBody);
     $messageParts[] = '--' . $alternativeBoundary . "--\r\n";
 
-    $sent = mail($recipient, $subject, implode('', $messageParts), implode("\r\n", $headers));
-    finish_with_status($sent ? 'ok' : 'fehler');
+    $delivery = send_mail_to_recipients($recipients, $subject, implode('', $messageParts), $headers);
+    append_lead_archive($mailData, $attachments, $delivery);
+    finish_with_status(any_mail_accepted($delivery) ? 'ok' : 'fehler');
 }
 
 $boundary = 'plj-' . bin2hex(random_bytes(16));
@@ -328,5 +408,6 @@ foreach ($attachments as $attachment) {
 
 $messageParts[] = '--' . $boundary . "--\r\n";
 
-$sent = mail($recipient, $subject, implode('', $messageParts), implode("\r\n", $headers));
-finish_with_status($sent ? 'ok' : 'fehler');
+$delivery = send_mail_to_recipients($recipients, $subject, implode('', $messageParts), $headers);
+append_lead_archive($mailData, $attachments, $delivery);
+finish_with_status(any_mail_accepted($delivery) ? 'ok' : 'fehler');
