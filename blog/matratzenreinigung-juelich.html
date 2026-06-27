@@ -17,20 +17,7 @@
 <meta content="article" property="og:type"/>
 <link rel="canonical" href="https://polsterreinigungjuelich.de/blog/matratzenreinigung-juelich.html">
 <link href="/favicon-32x32.png" rel="icon" sizes="32x32" type="image/png"/>
-<script src="https://cdn.tailwindcss.com"></script>
-<script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'fresh': { 50:'#f0fdfa',100:'#ccfbf1',200:'#99f6e4',300:'#5eead4',400:'#2dd4bf',500:'#14b8a6',600:'#0d9488',700:'#0f766e',800:'#115e59',900:'#134e4a' },
-                        'clean': { 50:'#e6f7f7',100:'#CCE1E2',200:'#b3d4d6',300:'#99c7ca',400:'#81B4B9',500:'#009096',600:'#007a7f',700:'#006468',800:'#004e52',900:'#003a3d' }
-                    },
-                    fontFamily: { 'display': ['system-ui','sans-serif'], 'body': ['system-ui','sans-serif'] }
-                }
-            }
-        }
-    </script>
+    <link rel="stylesheet" href="/assets/css/tailwind.css">
 <!-- Plausible -->
 <script data-domain="polsterreinigungjuelich.de" defer="" src="https://analytics.selfdevelopment.team/js/script.outbound-links.file-downloads.tagged-events.js"></script>
 <script type="application/ld+json">
@@ -64,7 +51,7 @@
 <!-- Content -->
 <article class="max-w-3xl mx-auto px-4 py-16">
 <figure class="mb-8 -mx-4 md:mx-0">
-<img alt="Vorher-Nachher Vergleich: Matratzenreinigung mit Fleckenentfernung in Jülich" class="w-full rounded-2xl" loading="eager" src="/blog/img/hero-matratzenreinigung.jpg"/>
+<img alt="Vorher-Nachher Vergleich: Matratzenreinigung mit Fleckenentfernung in Jülich" class="w-full rounded-2xl" loading="eager" src="/blog/img/hero-matratzenreinigung.webp"/>
 </figure>
 <p class="text-lg leading-relaxed mb-6">Eine Matratze sammelt im Laufe der Jahre Schweiß, Hautschuppen und Hausstaub. Trotzdem ist Matratzenreinigung nicht unser Hauptprodukt. Wenn Sie bereits ein Sofa, einen Sessel oder Autositze reinigen lassen möchten, prüfen wir eine Matratze als Zusatzleistung nach Foto und Material.</p>
 <section class="editor-note">
@@ -132,6 +119,42 @@
 <p class="font-bold text-clean-800 mb-2">Aktuelle Regel</p>
 <p class="text-sm text-gray-600">Matratzen nur nach Prüfung und bevorzugt als Zusatz zu Sofa, Sessel, Eckcouch oder Autositzen. Der Mindestauftrag für den gesamten Termin beträgt 149 Euro. Anfahrt und Endpreis stehen transparent im Angebot.</p>
 </div>
+<section class="my-12 rounded-2xl border border-clean-200 bg-clean-50 p-6 md:p-8">
+<p class="text-sm font-bold uppercase tracking-wide text-clean-700 mb-2">Prüfung nach Foto</p>
+<h2 class="text-2xl font-bold text-clean-900 mb-3">Matratze als Zusatzleistung anfragen</h2>
+<p class="text-gray-600 mb-6">Senden Sie uns Fotos und beschreiben Sie kurz den Fall. Wir sagen ehrlich, ob Reinigung sinnvoll ist.</p>
+<form action="/contact.php" method="POST" enctype="multipart/form-data" class="grid gap-4">
+<input type="text" name="website" tabindex="-1" autocomplete="off" class="hidden" aria-hidden="true">
+<input type="hidden" name="service" value="matratze-zusatz">
+<div class="grid md:grid-cols-2 gap-4">
+<label class="grid gap-2 text-sm font-semibold text-clean-900">Name
+<input required name="name" type="text" autocomplete="name" class="rounded-xl border border-clean-200 bg-white px-4 py-3 font-normal text-gray-900 outline-none focus:border-clean-500 focus:ring-2 focus:ring-clean-500/20">
+</label>
+<label class="grid gap-2 text-sm font-semibold text-clean-900">Telefon
+<input name="phone" type="tel" autocomplete="tel" class="rounded-xl border border-clean-200 bg-white px-4 py-3 font-normal text-gray-900 outline-none focus:border-clean-500 focus:ring-2 focus:ring-clean-500/20">
+</label>
+</div>
+<div class="grid md:grid-cols-2 gap-4">
+<label class="grid gap-2 text-sm font-semibold text-clean-900">E-Mail
+<input name="email" type="email" autocomplete="email" class="rounded-xl border border-clean-200 bg-white px-4 py-3 font-normal text-gray-900 outline-none focus:border-clean-500 focus:ring-2 focus:ring-clean-500/20">
+</label>
+<label class="grid gap-2 text-sm font-semibold text-clean-900">Ort
+<input required name="location" type="text" autocomplete="address-level2" placeholder="z.B. Jülich" class="rounded-xl border border-clean-200 bg-white px-4 py-3 font-normal text-gray-900 outline-none focus:border-clean-500 focus:ring-2 focus:ring-clean-500/20">
+</label>
+</div>
+<label class="grid gap-2 text-sm font-semibold text-clean-900">Kurzbeschreibung
+<textarea required name="message" rows="4" placeholder="Matratzengröße, Fleckenart, Alter, gewünschter Zeitraum" class="rounded-xl border border-clean-200 bg-white px-4 py-3 font-normal text-gray-900 outline-none focus:border-clean-500 focus:ring-2 focus:ring-clean-500/20"></textarea>
+</label>
+<label class="grid gap-2 text-sm font-semibold text-clean-900">Fotos optional
+<input name="photos[]" type="file" accept="image/jpeg,image/png,image/webp" multiple class="rounded-xl border border-dashed border-clean-300 bg-white px-4 py-3 text-sm font-normal text-gray-600">
+</label>
+<label class="flex items-start gap-3 text-sm text-gray-600">
+<input required type="checkbox" name="privacy" class="mt-1 rounded border-clean-300 text-clean-600 focus:ring-clean-500">
+<span>Ich stimme zu, dass meine Angaben zur Bearbeitung der Anfrage verarbeitet werden.</span>
+</label>
+<button type="submit" class="inline-flex w-full md:w-auto items-center justify-center rounded-full bg-clean-700 px-7 py-4 font-bold text-white transition hover:bg-clean-800">Anfrage senden</button>
+</form>
+</section>
 <h2 class="text-2xl font-bold text-clean-800 mt-12 mb-4">Wie oft sollte man eine Matratze reinigen lassen</h2>
 <p class="text-base leading-relaxed mb-4">Die Faustregel der Schlafmedizin: <strong>alle 12 bis 18 Monate</strong> für eine durchschnittliche Schlafgewohnheit. Bei besonderen Umständen empfehlen wir kürzere Intervalle:</p>
 <ul class="space-y-3 my-6 list-disc pl-5">

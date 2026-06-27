@@ -12,20 +12,7 @@
     <meta property="og:type" content="article">
     <link rel="canonical" href="https://polsterreinigungjuelich.de/blog/polsterreinigung-dueren.html">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'fresh': { 50:'#f0fdfa',100:'#ccfbf1',200:'#99f6e4',300:'#5eead4',400:'#2dd4bf',500:'#14b8a6',600:'#0d9488',700:'#0f766e',800:'#115e59',900:'#134e4a' },
-                        'clean': { 50:'#e6f7f7',100:'#CCE1E2',200:'#b3d4d6',300:'#99c7ca',400:'#81B4B9',500:'#009096',600:'#007a7f',700:'#006468',800:'#004e52',900:'#003a3d' }
-                    },
-                    fontFamily: { 'display': ['system-ui','sans-serif'], 'body': ['system-ui','sans-serif'] }
-                }
-            }
-        }
-    </script>
+    <link rel="stylesheet" href="/assets/css/tailwind.css">
     <!-- Plausible -->
     <script defer data-domain="polsterreinigungjuelich.de" src="https://analytics.selfdevelopment.team/js/script.js"></script>
     <!-- Google Analytics -->
@@ -119,6 +106,43 @@
         </div>
 
         <p class="text-gray-600 text-sm">Genaue Preise hängen von Größe, Material, Verschmutzungsgrad und Anfahrt ab. Schicken Sie uns ein Foto per WhatsApp oder Formular - wir machen Ihnen ein kostenloses Angebot.</p>
+
+        <section class="my-12 rounded-2xl border border-clean-200 bg-clean-50 p-6 md:p-8">
+            <p class="text-sm font-bold uppercase tracking-wide text-clean-700 mb-2">Anfrage aus Düren</p>
+            <h2 class="text-2xl font-bold text-clean-900 mb-3">Polster reinigen lassen?</h2>
+            <p class="text-gray-600 mb-6">Senden Sie kurz Adresse, Polstertyp und wenn möglich Fotos. Wir prüfen Anfahrt und Festpreis vor dem Termin.</p>
+            <form action="/contact.php" method="POST" enctype="multipart/form-data" class="grid gap-4">
+                <input type="text" name="website" tabindex="-1" autocomplete="off" class="hidden" aria-hidden="true">
+                <input type="hidden" name="service" value="sofa">
+                <div class="grid md:grid-cols-2 gap-4">
+                    <label class="grid gap-2 text-sm font-semibold text-clean-900">Name
+                        <input required name="name" type="text" autocomplete="name" class="rounded-xl border border-clean-200 bg-white px-4 py-3 font-normal text-gray-900 outline-none focus:border-clean-500 focus:ring-2 focus:ring-clean-500/20">
+                    </label>
+                    <label class="grid gap-2 text-sm font-semibold text-clean-900">Telefon
+                        <input name="phone" type="tel" autocomplete="tel" class="rounded-xl border border-clean-200 bg-white px-4 py-3 font-normal text-gray-900 outline-none focus:border-clean-500 focus:ring-2 focus:ring-clean-500/20">
+                    </label>
+                </div>
+                <div class="grid md:grid-cols-2 gap-4">
+                    <label class="grid gap-2 text-sm font-semibold text-clean-900">E-Mail
+                        <input name="email" type="email" autocomplete="email" class="rounded-xl border border-clean-200 bg-white px-4 py-3 font-normal text-gray-900 outline-none focus:border-clean-500 focus:ring-2 focus:ring-clean-500/20">
+                    </label>
+                    <label class="grid gap-2 text-sm font-semibold text-clean-900">Ort
+                        <input required name="location" type="text" autocomplete="address-level2" placeholder="z.B. Düren, Birkesdorf, Merzenich" class="rounded-xl border border-clean-200 bg-white px-4 py-3 font-normal text-gray-900 outline-none focus:border-clean-500 focus:ring-2 focus:ring-clean-500/20">
+                    </label>
+                </div>
+                <label class="grid gap-2 text-sm font-semibold text-clean-900">Kurzbeschreibung
+                    <textarea required name="message" rows="4" placeholder="Sofa, Sessel oder Autositze? Größe, Material, Flecken, gewünschter Zeitraum" class="rounded-xl border border-clean-200 bg-white px-4 py-3 font-normal text-gray-900 outline-none focus:border-clean-500 focus:ring-2 focus:ring-clean-500/20"></textarea>
+                </label>
+                <label class="grid gap-2 text-sm font-semibold text-clean-900">Fotos optional
+                    <input name="photos[]" type="file" accept="image/jpeg,image/png,image/webp" multiple class="rounded-xl border border-dashed border-clean-300 bg-white px-4 py-3 text-sm font-normal text-gray-600">
+                </label>
+                <label class="flex items-start gap-3 text-sm text-gray-600">
+                    <input required type="checkbox" name="privacy" class="mt-1 rounded border-clean-300 text-clean-600 focus:ring-clean-500">
+                    <span>Ich stimme zu, dass meine Angaben zur Bearbeitung der Anfrage verarbeitet werden.</span>
+                </label>
+                <button type="submit" class="inline-flex w-full md:w-auto items-center justify-center rounded-full bg-clean-700 px-7 py-4 font-bold text-white transition hover:bg-clean-800">Anfrage senden</button>
+            </form>
+        </section>
 
         <h2 class="text-2xl font-bold text-clean-800 mt-12 mb-4">Unser Einsatzgebiet rund um Düren</h2>
 

@@ -22,45 +22,7 @@
     <!-- System Fonts (GDPR compliant - no external requests) -->
     
     <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'fresh': {
-                            50: '#f0fdfa',
-                            100: '#ccfbf1',
-                            200: '#99f6e4',
-                            300: '#5eead4',
-                            400: '#2dd4bf',
-                            500: '#14b8a6',
-                            600: '#0d9488',
-                            700: '#0f766e',
-                            800: '#115e59',
-                            900: '#134e4a',
-                        },
-                        'clean': {
-                            50: '#e6f7f7',
-                            100: '#CCE1E2',
-                            200: '#b3d4d6',
-                            300: '#99c7ca',
-                            400: '#81B4B9',
-                            500: '#009096',
-                            600: '#007a7f',
-                            700: '#006468',
-                            800: '#004e52',
-                            900: '#003a3d',
-                        }
-                    },
-                    fontFamily: {
-                        'display': ['-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
-                        'body': ['-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
-                    }
-                }
-            }
-        }
-    </script>
+    <link rel="stylesheet" href="/assets/css/tailwind.css">
     
     <style>
         * {
@@ -307,7 +269,7 @@
             <div class="flex items-center justify-between h-20 md:h-24">
                 <!-- Logo -->
                 <a href="#" class="flex items-center gap-2">
-                    <img src="assets/images/logo.png" alt="Polsterreinigung Jülich Logo" class="h-16 md:h-20 w-auto">
+                    <img src="assets/images/logo-320.webp" alt="Polsterreinigung Jülich Logo" class="h-16 md:h-20 w-auto">
                 </a>
                 
                 <!-- Desktop Menu -->
@@ -415,7 +377,7 @@
                 <!-- Right: Image -->
                 <div class="relative">
                     <div class="relative float-animation">
-                        <img src="assets/images/polster-hero.png" alt="Professionelle Polsterreinigung - Vorher/Nachher" class="w-full rounded-3xl shadow-2xl">
+                        <img src="assets/images/polster-hero.webp" alt="Professionelle Polsterreinigung - Vorher/Nachher" class="w-full rounded-3xl shadow-2xl">
                         <!-- Floating badge -->
                         <div class="absolute -bottom-4 -left-4 bg-white rounded-2xl shadow-xl p-4 flex items-center gap-3 tilt-card card-shine stagger-item">
                             <div class="w-12 h-12 bg-fresh-100 rounded-full flex items-center justify-center magnetic-btn btn-ripple">
@@ -523,7 +485,7 @@
                 <!-- Polstermöbel -->
                 <div class="service-card bg-white rounded-3xl overflow-hidden shadow-lg fade-in tilt-card card-shine">
                     <div class="aspect-[4/3] overflow-hidden">
-                        <img src="assets/images/polster-sofa-clean.png" alt="Sofa Reinigung" class="w-full h-full object-cover hover:scale-105 transition-transform duration-500">
+                        <img src="assets/images/polster-sofa-clean.webp" alt="Sofa Reinigung" class="w-full h-full object-cover hover:scale-105 transition-transform duration-500">
                     </div>
                     <div class="p-6 md:p-8">
                         <div class="w-14 h-14 bg-gradient-to-br from-clean-500 to-fresh-500 rounded-2xl flex items-center justify-center mb-4 -mt-14 relative shadow-lg magnetic-btn btn-ripple">
@@ -544,7 +506,7 @@
                 <!-- Autositze -->
                 <div class="service-card bg-white rounded-3xl overflow-hidden shadow-lg fade-in tilt-card card-shine">
                     <div class="aspect-[4/3] overflow-hidden">
-                        <img src="assets/images/polster-auto-interior.png" alt="Autositz Reinigung" class="w-full h-full object-cover hover:scale-105 transition-transform duration-500">
+                        <img src="assets/images/polster-auto-interior.webp" alt="Autositz Reinigung" class="w-full h-full object-cover hover:scale-105 transition-transform duration-500">
                     </div>
                     <div class="p-6 md:p-8">
                         <div class="w-14 h-14 bg-gradient-to-br from-clean-500 to-fresh-500 rounded-2xl flex items-center justify-center mb-4 -mt-14 relative shadow-lg magnetic-btn btn-ripple">
@@ -565,7 +527,7 @@
                 <!-- Matratzen Zusatzleistung -->
                 <div class="service-card bg-white rounded-3xl overflow-hidden shadow-lg fade-in tilt-card card-shine">
                     <div class="aspect-[4/3] overflow-hidden">
-                        <img src="assets/images/polster-matratze.png" alt="Matratzen Reinigung" class="w-full h-full object-cover hover:scale-105 transition-transform duration-500">
+                        <img src="assets/images/polster-matratze.webp" alt="Matratzen Reinigung" class="w-full h-full object-cover hover:scale-105 transition-transform duration-500">
                     </div>
                     <div class="p-6 md:p-8">
                         <div class="w-14 h-14 bg-gradient-to-br from-clean-500 to-fresh-500 rounded-2xl flex items-center justify-center mb-4 -mt-14 relative shadow-lg magnetic-btn btn-ripple">
@@ -624,7 +586,7 @@
             </div>
             
             <div class="relative max-w-4xl mx-auto fade-in">
-                <img src="assets/images/polster-vorher-nachher.png" alt="Vorher/Nachher Vergleich Polsterreinigung" class="w-full rounded-3xl shadow-2xl">
+                <img src="assets/images/polster-vorher-nachher.webp" alt="Vorher/Nachher Vergleich Polsterreinigung" class="w-full rounded-3xl shadow-2xl">
                 <div class="absolute top-4 left-4 bg-red-500 text-white px-4 py-2 rounded-full font-bold shadow-lg">VORHER</div>
                 <div class="absolute top-4 right-4 bg-fresh-500 text-white px-4 py-2 rounded-full font-bold shadow-lg magnetic-btn btn-ripple">NACHHER</div>
             </div>
@@ -653,7 +615,7 @@
                     <div class="text-center">
                         <div class="relative inline-block mb-6">
                             <div class="w-24 h-24 rounded-3xl overflow-hidden shadow-xl">
-                                <img src="assets/images/polster-process-1.png" alt="Anfrage stellen" class="w-full h-full object-cover">
+                                <img src="assets/images/polster-process-1.webp" alt="Anfrage stellen" class="w-full h-full object-cover">
                             </div>
                             <div class="absolute -top-3 -right-3 w-10 h-10 bg-gradient-to-br from-clean-500 to-fresh-500 rounded-full flex items-center justify-center text-white font-bold shadow-lg magnetic-btn btn-ripple">1</div>
                         </div>
@@ -673,7 +635,7 @@
                     <div class="text-center">
                         <div class="relative inline-block mb-6">
                             <div class="w-24 h-24 rounded-3xl overflow-hidden shadow-xl">
-                                <img src="assets/images/polster-process-2.png" alt="Termin vereinbaren" class="w-full h-full object-cover">
+                                <img src="assets/images/polster-process-2.webp" alt="Termin vereinbaren" class="w-full h-full object-cover">
                             </div>
                             <div class="absolute -top-3 -right-3 w-10 h-10 bg-gradient-to-br from-clean-500 to-fresh-500 rounded-full flex items-center justify-center text-white font-bold shadow-lg magnetic-btn btn-ripple">2</div>
                         </div>
@@ -693,7 +655,7 @@
                     <div class="text-center">
                         <div class="relative inline-block mb-6">
                             <div class="w-24 h-24 rounded-3xl overflow-hidden shadow-xl">
-                                <img src="assets/images/polster-process-3.png" alt="Sauberkeit genießen" class="w-full h-full object-cover">
+                                <img src="assets/images/polster-process-3.webp" alt="Sauberkeit genießen" class="w-full h-full object-cover">
                             </div>
                             <div class="absolute -top-3 -right-3 w-10 h-10 bg-gradient-to-br from-clean-500 to-fresh-500 rounded-full flex items-center justify-center text-white font-bold shadow-lg magnetic-btn btn-ripple">3</div>
                         </div>
@@ -1273,7 +1235,7 @@
                 <!-- Logo & Info -->
                 <div class="md:col-span-2">
                     <div class="mb-6">
-                        <img src="assets/images/logo.png" alt="Polsterreinigung Jülich Logo" class="h-16 w-auto">
+                        <img src="assets/images/logo-320.webp" alt="Polsterreinigung Jülich Logo" class="h-16 w-auto">
                     </div>
                     <p class="text-slate-400 mb-6 max-w-sm">
                         Professionelle Polsterreinigung für Sofa, Sessel, Eckcouch und Autositze in Jülich und Umgebung. Vor Ort, ehrlich geprüft, fair kalkuliert.
