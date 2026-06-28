@@ -1289,6 +1289,7 @@
     </a>
 
     <!-- SCRIPTS -->
+    <script src="assets/js/plj-attribution.js"></script>
     <script>
         // Mobile menu toggle
         const mobileMenuBtn = document.getElementById('mobile-menu-btn');
@@ -1654,6 +1655,7 @@
 
             setSubmittingState();
             try {
+                window.PLJAttribution?.fill(leadForm);
                 const response = await fetch(leadForm.action, {
                     method: 'POST',
                     body: new FormData(leadForm),

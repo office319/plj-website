@@ -56,6 +56,82 @@ function service_label(string $service): string
     return $labels[$service] ?? $service;
 }
 
+function post_text(string $key, int $limit = 2048): string
+{
+    $value = trim((string)($_POST[$key] ?? ''));
+    $value = preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]+/', '', $value) ?? '';
+    return substr($value, 0, $limit);
+}
+
+function collect_tracking(): array
+{
+    $keys = [
+        'source_url',
+        'landing_url',
+        'first_landing_url',
+        'referrer',
+        'first_referrer',
+        'utm_source',
+        'utm_medium',
+        'utm_campaign',
+        'utm_content',
+        'utm_term',
+        'gclid',
+        'gbraid',
+        'wbraid',
+        'fbclid',
+        'msclkid',
+    ];
+    $tracking = [];
+    foreach ($keys as $key) {
+        $tracking[$key] = post_text($key, 2048);
+    }
+
+    $httpReferer = trim((string)($_SERVER['HTTP_REFERER'] ?? ''));
+    if ($tracking['source_url'] === '' && $httpReferer !== '') {
+        $tracking['source_url'] = substr($httpReferer, 0, 2048);
+    }
+    if ($tracking['landing_url'] === '' && $httpReferer !== '') {
+        $tracking['landing_url'] = substr($httpReferer, 0, 2048);
+    }
+
+    return $tracking;
+}
+
+function compact_tracking(array $tracking): array
+{
+    return array_filter($tracking, static fn ($value): bool => trim((string)$value) !== '');
+}
+
+function tracking_lines(array $tracking): array
+{
+    $labels = [
+        'source_url' => 'Source URL',
+        'landing_url' => 'Landing URL',
+        'first_landing_url' => 'First landing URL',
+        'referrer' => 'Referrer',
+        'first_referrer' => 'First referrer',
+        'utm_source' => 'UTM source',
+        'utm_medium' => 'UTM medium',
+        'utm_campaign' => 'UTM campaign',
+        'utm_content' => 'UTM content',
+        'utm_term' => 'UTM term',
+        'gclid' => 'GCLID',
+        'gbraid' => 'GBRAID',
+        'wbraid' => 'WBRAID',
+        'fbclid' => 'FBCLID',
+        'msclkid' => 'MSCLKID',
+    ];
+    $lines = [];
+    foreach ($labels as $key => $label) {
+        $value = trim((string)($tracking[$key] ?? ''));
+        if ($value !== '') {
+            $lines[] = $label . ': ' . $value;
+        }
+    }
+    return $lines;
+}
+
 function phone_href(string $phone): string
 {
     $trimmed = trim($phone);
@@ -118,6 +194,19 @@ function build_html_mail(array $data): string
     $whatsappHref = whatsapp_href($data['phone']);
     $photoText = $data['attachment_count'] === 1 ? '1 Foto' : $data['attachment_count'] . ' Fotos';
     $messageHtml = nl2br(esc($data['message']));
+    $trackingRows = '';
+    foreach (tracking_lines($data['tracking'] ?? []) as $line) {
+        [$label, $value] = array_pad(explode(': ', $line, 2), 2, '');
+        $trackingRows .= info_row($label, $value);
+    }
+    $trackingBlock = $trackingRows !== ''
+        ? '<tr><td style="padding:16px 28px 0;">'
+            . '<div style="padding:16px 18px;border-radius:8px;background:#f7fbfa;border:1px solid #dcebea;">'
+            . '<div style="margin-bottom:6px;color:#5d7375;font:900 12px -apple-system,BlinkMacSystemFont,Segoe UI,Arial,sans-serif;text-transform:uppercase;letter-spacing:.04em;">Quelle / Tracking</div>'
+            . '<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="border-collapse:collapse;">' . $trackingRows . '</table>'
+            . '</div>'
+            . '</td></tr>'
+        : '';
 
     $buttons = action_button($emailHref, 'Per E-Mail antworten')
         . action_button($phoneHref, 'Anrufen', '#174f52')
@@ -155,6 +244,7 @@ function build_html_mail(array $data): string
         . '<div style="font:700 16px/1.55 -apple-system,BlinkMacSystemFont,Segoe UI,Arial,sans-serif;color:#062f32;">' . $messageHtml . '</div>'
         . '</div>'
         . '</td></tr>'
+        . $trackingBlock
         . '<tr><td style="padding:22px 28px 6px;">' . $buttons . '</td></tr>'
         . '<tr><td style="padding:0 28px 26px;">'
         . '<p style="margin:8px 0 0;color:#5d7375;font:600 13px/1.45 -apple-system,BlinkMacSystemFont,Segoe UI,Arial,sans-serif;">Datenschutz: Kunde hat der Verarbeitung zur Bearbeitung der Anfrage zugestimmt. Bilder sind nur als Mail-Anhang enthalten und werden nicht lokal auf der Website gespeichert.</p>'
@@ -208,6 +298,7 @@ function append_lead_archive(array $data, array $attachments, array $delivery): 
             'service' => $data['service'],
             'message' => $data['message'],
             'attachment_count' => $data['attachment_count'],
+            'tracking' => compact_tracking($data['tracking'] ?? []),
         ],
         'attachments' => attachment_log_data($attachments),
         'delivery' => $delivery,
@@ -321,6 +412,7 @@ $location = trim((string)($_POST['location'] ?? ''));
 $service = trim((string)($_POST['service'] ?? ''));
 $message = trim((string)($_POST['message'] ?? ''));
 $privacy = isset($_POST['privacy']);
+$tracking = collect_tracking();
 
 if ($name === '' || $location === '' || $service === '' || $message === '' || !$privacy) {
     finish_with_status('fehler');
@@ -359,6 +451,12 @@ $bodyLines = [
     'Datenschutz: zugestimmt',
     'Zeit: ' . date('c'),
 ];
+$trackingLines = tracking_lines($tracking);
+if ($trackingLines) {
+    $bodyLines[] = '';
+    $bodyLines[] = 'Quelle / Tracking:';
+    array_push($bodyLines, ...$trackingLines);
+}
 $textBody = implode("\r\n", $bodyLines);
 
 $attachments = [];
@@ -417,6 +515,7 @@ $mailData = [
     'message' => $message,
     'attachment_count' => count($attachments),
     'time' => date('d.m.Y H:i'),
+    'tracking' => $tracking,
 ];
 $htmlBody = build_html_mail($mailData);
 
@@ -436,6 +535,7 @@ $relay = post_relay([
         'location' => $location,
         'service' => $service,
         'message' => $message,
+        'tracking' => compact_tracking($tracking),
     ],
     'attachments' => attachment_relay_data($attachments),
 ]);
