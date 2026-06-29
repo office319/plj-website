@@ -3,6 +3,23 @@
    ============================================ */
 
 document.addEventListener('DOMContentLoaded', () => {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isMobileViewport = window.matchMedia('(max-width: 767px)').matches;
+    const isCoarsePointer = window.matchMedia('(pointer: coarse)').matches;
+    const enableEffects = !prefersReducedMotion && !isMobileViewport && !isCoarsePointer;
+
+    if (!enableEffects) {
+        document.querySelectorAll('.stagger-item, .reveal-left, .reveal-right, .reveal-up').forEach(el => {
+            el.classList.add('visible');
+        });
+        document.querySelectorAll('.counter').forEach(el => {
+            const target = el.dataset.target || el.textContent;
+            const suffix = el.dataset.suffix || '';
+            const prefix = el.dataset.prefix || '';
+            el.textContent = prefix + target + suffix;
+        });
+        return;
+    }
 
     // ========================================
     // 1. SCROLL PROGRESS BAR
@@ -235,6 +252,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
         imgObserver.observe(img);
     });
-
-    console.log('✨ WOW Effects loaded - PolsterreiningungJuelich.de');
 });

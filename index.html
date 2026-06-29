@@ -140,6 +140,42 @@
         .whatsapp-btn {
             animation: whatsapp-pulse 2s infinite;
         }
+        .floating-whatsapp-cta {
+            --floating-wa-lift: 0px;
+            width: 3.75rem;
+            height: 3.75rem;
+            padding: 0;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            bottom: calc(1.25rem + env(safe-area-inset-bottom));
+            right: 1.25rem;
+            z-index: 60;
+            box-shadow: 0 10px 24px rgba(15, 23, 42, 0.18), 0 4px 12px rgba(37, 211, 102, 0.24);
+            transform: translate3d(0, calc(-1 * var(--floating-wa-lift)), 0);
+            transition: opacity 240ms ease, transform 240ms ease, box-shadow 240ms ease;
+            will-change: opacity, transform;
+        }
+        .floating-whatsapp-cta:hover {
+            transform: translate3d(0, calc(-1 * var(--floating-wa-lift)), 0) scale(1.06);
+        }
+        .floating-whatsapp-cta.is-form-visible {
+            opacity: 0;
+            pointer-events: none;
+            transform: translate3d(0, 5rem, 0) scale(0.92);
+        }
+        @media (max-width: 640px) {
+            .floating-whatsapp-cta {
+                width: 3.5rem;
+                height: 3.5rem;
+                bottom: calc(0.875rem + env(safe-area-inset-bottom));
+                right: 0.875rem;
+            }
+            .floating-whatsapp-cta svg {
+                width: 1.75rem;
+                height: 1.75rem;
+            }
+        }
         
         /* Noise texture overlay */
         .noise::before {
@@ -344,7 +380,7 @@
                     <!-- CTA Buttons -->
                     <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                         <a href="#lead-form" class="group inline-flex items-center justify-center gap-3 bg-white text-slate-800 px-8 py-4 rounded-full font-bold text-lg hover:bg-clean-50 transition-all duration-300 shadow-2xl hover:shadow-white/20 shine">
-                            <span>Foto senden & Festpreis bekommen</span>
+                            <span>Kostenlose Preisschatzung per Foto</span>
                             <svg class="w-5 h-5 floating group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
                             </svg>
@@ -353,15 +389,15 @@
                             <svg class="w-6 h-6 floating" fill="currentColor" viewBox="0 0 24 24">
                                 <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
                             </svg>
-                            <span>WhatsApp</span>
+                            <span>Lieber per WhatsApp?</span>
                         </a>
                     </div>
                     
                     <!-- Stats -->
                     <div class="grid grid-cols-3 gap-4 mt-12 pt-8 border-t border-white/10">
                         <div class="text-center lg:text-left">
-                            <div class="text-3xl sm:text-4xl font-display font-bold text-white">100%</div>
-                            <div class="text-white/60 text-sm">5-Sterne Bewertungen</div>
+                            <div class="text-3xl sm:text-4xl font-display font-bold text-white">6</div>
+                            <div class="text-white/60 text-sm">Google Bewertungen</div>
                         </div>
                         <div class="text-center lg:text-left">
                             <div class="text-3xl sm:text-4xl font-display font-bold text-white">5.0</div>
@@ -386,8 +422,8 @@
                                 </svg>
                             </div>
                             <div>
-                                <div class="font-bold text-slate-800">100%</div>
-                                <div class="text-sm text-slate-500">Zufriedenheit</div>
+                                <div class="font-bold text-slate-800">5.0</div>
+                                <div class="text-sm text-slate-500">Google Feedback</div>
                             </div>
                         </div>
                     </div>
@@ -448,7 +484,7 @@
                         </li>
                         <li class="flex items-start gap-4">
                             <span class="text-fresh-500 text-xl">✓</span>
-                            <span class="text-slate-700"><strong>Geruchsneutralisation</strong> – frisch wie neu</span>
+                            <span class="text-slate-700"><strong>Geruchsbehandlung</strong> - spürbar frischer</span>
                         </li>
                         <li class="flex items-start gap-4">
                             <span class="text-fresh-500 text-xl">✓</span>
@@ -515,10 +551,10 @@
                             </svg>
                         </div>
                         <h3 class="text-xl font-display font-bold text-slate-800 mb-3">Autositze & Innenraum</h3>
-                        <p class="text-slate-600 mb-4">Professionelle Reinigung für Sitze und kompletten Fahrzeuginnenraum. Wie frisch vom Händler.</p>
+                        <p class="text-slate-600 mb-4">Professionelle Reinigung für Stoffsitze und Innenraum nach Foto und Umfang.</p>
                         <div class="flex flex-wrap gap-2">
                             <span class="bg-slate-100 text-slate-600 px-3 py-1 rounded-full text-sm">Sitze</span>
-                            <span class="bg-slate-100 text-slate-600 px-3 py-1 rounded-full text-sm">Dachhimmel</span>
+                            <span class="bg-slate-100 text-slate-600 px-3 py-1 rounded-full text-sm">Innenraum</span>
                             <span class="bg-slate-100 text-slate-600 px-3 py-1 rounded-full text-sm">Fußraum</span>
                         </div>
                     </div>
@@ -581,7 +617,7 @@
                     Vorher / <span class="gradient-text-animated">Nachher</span>
                 </h2>
                 <p class="text-lg text-slate-600 max-w-2xl mx-auto">
-                    Überzeugen Sie sich selbst von unserer Arbeit. 100% echte Ergebnisse unserer Kunden.
+                    Überzeugen Sie sich selbst von unserer Arbeit. Echte Ergebnisse aus Kundenaufträgen.
                 </p>
             </div>
             
@@ -593,7 +629,7 @@
             
             <!-- Trust text -->
             <div class="mt-12 text-center fade-in">
-                <p class="text-slate-500 italic">"Der Unterschied ist unglaublich! Mein Sofa sieht aus wie neu."</p>
+                <p class="text-slate-500 italic">"Der Unterschied ist deutlich sichtbar. Mein Sofa wirkt wieder viel frischer."</p>
                 <p class="text-slate-700 font-semibold mt-2">– Zufriedener Kunde aus Jülich</p>
             </div>
         </div>
@@ -755,11 +791,11 @@
                             <span class="font-bold text-fresh-400">ab 220€</span>
                         </li>
                         <li class="flex justify-between items-center py-3 border-b border-white/10">
-                            <span class="text-white/80">Dachhimmel</span>
+                            <span class="text-white/80">Innenraumdetails</span>
                             <span class="font-bold text-fresh-400">nach Prüfung</span>
                         </li>
                         <li class="flex justify-between items-center py-3">
-                            <span class="text-white/80">Detailing (auf Anfrage)</span>
+                            <span class="text-white/80">Zusatzarbeiten</span>
                             <span class="font-bold text-fresh-400">ab 199€</span>
                         </li>
                     </ul>
@@ -815,14 +851,14 @@
                             </div>
                         </div>
                         <div class="flex flex-wrap gap-2">
-                            <span class="bg-fresh-50 text-fresh-700 px-4 py-2 rounded-full font-medium magnetic-btn btn-ripple">Jülich</span>
-                            <span class="bg-fresh-50 text-fresh-700 px-4 py-2 rounded-full font-medium magnetic-btn btn-ripple">Aldenhoven</span>
-                            <span class="bg-fresh-50 text-fresh-700 px-4 py-2 rounded-full font-medium magnetic-btn btn-ripple">Linnich</span>
-                            <span class="bg-fresh-50 text-fresh-700 px-4 py-2 rounded-full font-medium magnetic-btn btn-ripple">Titz</span>
-                            <span class="bg-fresh-50 text-fresh-700 px-4 py-2 rounded-full font-medium magnetic-btn btn-ripple">Niederzier</span>
-                            <span class="bg-fresh-50 text-fresh-700 px-4 py-2 rounded-full font-medium magnetic-btn btn-ripple">Inden</span>
+                            <a href="/" class="bg-fresh-50 text-fresh-700 px-4 py-2 rounded-full font-medium magnetic-btn btn-ripple">Jülich</a>
+                            <a href="/blog/polsterreinigung-aldenhoven.html" class="bg-fresh-50 text-fresh-700 px-4 py-2 rounded-full font-medium magnetic-btn btn-ripple">Aldenhoven</a>
+                            <a href="/blog/polsterreinigung-linnich.html" class="bg-fresh-50 text-fresh-700 px-4 py-2 rounded-full font-medium magnetic-btn btn-ripple">Linnich</a>
+                            <a href="/blog/polsterreinigung-titz.html" class="bg-fresh-50 text-fresh-700 px-4 py-2 rounded-full font-medium magnetic-btn btn-ripple">Titz</a>
+                            <a href="/blog/polsterreinigung-niederzier.html" class="bg-fresh-50 text-fresh-700 px-4 py-2 rounded-full font-medium magnetic-btn btn-ripple">Niederzier</a>
+                            <a href="/blog/polsterreinigung-inden.html" class="bg-fresh-50 text-fresh-700 px-4 py-2 rounded-full font-medium magnetic-btn btn-ripple">Inden</a>
                             <span class="bg-fresh-50 text-fresh-700 px-4 py-2 rounded-full font-medium magnetic-btn btn-ripple">Langerwehe</span>
-                            <span class="bg-fresh-50 text-fresh-700 px-4 py-2 rounded-full font-medium magnetic-btn btn-ripple">Düren</span>
+                            <a href="/blog/polsterreinigung-dueren.html" class="bg-fresh-50 text-fresh-700 px-4 py-2 rounded-full font-medium magnetic-btn btn-ripple">Düren</a>
                             <span class="bg-fresh-50 text-fresh-700 px-4 py-2 rounded-full font-medium magnetic-btn btn-ripple">Merzenich</span>
                             <span class="bg-fresh-50 text-fresh-700 px-4 py-2 rounded-full font-medium magnetic-btn btn-ripple">Elsdorf</span>
                         </div>
@@ -840,12 +876,12 @@
                             </div>
                         </div>
                         <div class="flex flex-wrap gap-2">
-                            <span class="bg-white text-slate-600 px-4 py-2 rounded-full">Aachen</span>
-                            <span class="bg-white text-slate-600 px-4 py-2 rounded-full">Köln</span>
-                            <span class="bg-white text-slate-600 px-4 py-2 rounded-full">Düsseldorf</span>
-                            <span class="bg-white text-slate-600 px-4 py-2 rounded-full">Mönchengladbach</span>
-                            <span class="bg-white text-slate-600 px-4 py-2 rounded-full">Krefeld</span>
-                            <span class="bg-white text-slate-600 px-4 py-2 rounded-full">+ mehr</span>
+                            <span class="bg-white text-slate-600 px-4 py-2 rounded-full">Eschweiler</span>
+                            <span class="bg-white text-slate-600 px-4 py-2 rounded-full">Kreuzau</span>
+                            <span class="bg-white text-slate-600 px-4 py-2 rounded-full">Nörvenich</span>
+                            <span class="bg-white text-slate-600 px-4 py-2 rounded-full">Erkelenz</span>
+                            <span class="bg-white text-slate-600 px-4 py-2 rounded-full">Aachen nach Absprache</span>
+                            <span class="bg-white text-slate-600 px-4 py-2 rounded-full">+ weitere Orte</span>
                         </div>
                     </div>
                 </div>
@@ -1068,12 +1104,12 @@
         
         <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
-                <span class="inline-block bg-white/10 text-white/90 px-4 py-2 rounded-full text-sm font-semibold mb-4">KONTAKT</span>
+                <span class="inline-block bg-white/10 text-white/90 px-4 py-2 rounded-full text-sm font-semibold mb-4">FOTO-ANFRAGE</span>
                 <h2 class="text-3xl sm:text-4xl lg:text-5xl font-display font-bold text-white mb-4">
-                    Jetzt <span class="text-fresh-300">Angebot</span> anfordern!
+                    Kostenlose <span class="text-fresh-300">Preisschatzung</span> per Foto
                 </h2>
                 <p class="text-lg text-white/80 max-w-2xl mx-auto">
-                    Schreiben Sie uns oder rufen Sie an. Wir melden uns schnellstmöglich mit einem kostenlosen Angebot.
+                    Senden Sie ein Foto, Ort und Telefonnummer. Wir melden uns meist innerhalb von 30 Minuten.
                 </p>
             </div>
             
@@ -1082,33 +1118,51 @@
                 <div class="bg-white rounded-3xl p-8 md:p-10 shadow-2xl">
                     <form id="lead-form" action="contact.php" method="POST" enctype="multipart/form-data" class="space-y-6" novalidate>
                         <div id="form-success" class="hidden rounded-2xl bg-fresh-50 border border-fresh-200 text-fresh-800 px-4 py-3 text-sm" role="status" aria-live="polite">
-                            Danke, Ihre Anfrage ist angekommen. Wir melden uns schnellstmöglich mit Rückfragen oder einem Angebot.
+                            Danke, Ihre Anfrage ist angekommen. Wir melden uns meist innerhalb von 30 Minuten.
                         </div>
                         <div id="form-error" class="hidden rounded-2xl bg-red-50 border border-red-200 text-red-700 px-4 py-3 text-sm" role="alert" aria-live="assertive">
-                            Die Anfrage konnte nicht gesendet werden. Bitte schreiben Sie uns direkt per WhatsApp.
+                            Die Anfrage konnte gerade nicht bestatigt werden. Ihre Eingaben bleiben erhalten - bitte versuchen Sie es erneut.
                         </div>
                         <input type="text" name="website" tabindex="-1" autocomplete="off" class="hidden" aria-hidden="true">
                         <div>
-                            <label for="name" class="block text-sm font-medium text-slate-700 mb-2">Name *</label>
-                            <input type="text" id="name" name="name" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-clean-500 focus:ring-2 focus:ring-clean-500/20 transition outline-none">
-                        </div>
-                        <div class="grid sm:grid-cols-2 gap-4">
-                            <div>
-                                <label for="email" class="block text-sm font-medium text-slate-700 mb-2">E-Mail *</label>
-                                <input type="email" id="email" name="email" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-clean-500 focus:ring-2 focus:ring-clean-500/20 transition outline-none">
-                            </div>
-                            <div>
-                                <label for="phone" class="block text-sm font-medium text-slate-700 mb-2">Telefon</label>
-                                <input type="tel" id="phone" name="phone" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-clean-500 focus:ring-2 focus:ring-clean-500/20 transition outline-none">
+                            <div class="rounded-2xl bg-clean-50 border border-clean-200 px-4 py-4">
+                                <p class="text-sm font-bold text-clean-900">1x Gesamtansicht + 1-2 Nahaufnahmen</p>
+                                <p class="text-sm text-clean-800 mt-1">Bis zu 6 Fotos, wir verkleinern sie automatisch.</p>
                             </div>
                         </div>
                         <div>
-                            <label for="location" class="block text-sm font-medium text-slate-700 mb-2">Ort / Stadtteil *</label>
-                            <input type="text" id="location" name="location" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-clean-500 focus:ring-2 focus:ring-clean-500/20 transition outline-none" placeholder="z.B. Jülich, Düren, Aldenhoven">
+                            <label for="photos" class="block text-sm font-medium text-slate-700 mb-2">Fotos</label>
+                            <div id="photos-dropzone" class="relative rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50 px-4 py-5 transition hover:border-clean-400 hover:bg-clean-50/60">
+                                <input type="file" id="photos" name="photos[]" multiple accept="image/*" class="sr-only">
+                                <input type="file" id="photos-camera" accept="image/*" capture="environment" class="sr-only">
+                                <div class="grid sm:grid-cols-2 gap-3">
+                                    <label for="photos-camera" class="flex cursor-pointer items-center justify-center gap-3 rounded-xl bg-clean-700 px-5 py-4 text-white font-bold shadow-md hover:bg-clean-800 transition">
+                                        <span class="flex h-10 w-10 items-center justify-center rounded-full bg-white/20" aria-hidden="true">
+                                            <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h2l1.2-2h7.6L17 7h2a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/>
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                            </svg>
+                                        </span>
+                                        <span>Foto aufnehmen</span>
+                                    </label>
+                                    <label for="photos" class="flex cursor-pointer items-center justify-center gap-3 rounded-xl bg-white px-5 py-4 text-slate-800 font-bold border border-slate-200 shadow-sm hover:bg-clean-50 transition">
+                                        <span class="flex h-10 w-10 items-center justify-center rounded-full bg-clean-50 text-clean-700" aria-hidden="true">
+                                            <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.6-4.6a2 2 0 012.8 0L16 16m-2-2l1.6-1.6a2 2 0 012.8 0L20 14m-7-7h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                            </svg>
+                                        </span>
+                                        <span>Galerie wählen</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div id="photos-preview-grid" class="hidden grid grid-cols-2 gap-3 sm:grid-cols-4 mt-3"></div>
+                            <p id="photos-summary" class="hidden text-xs text-fresh-700 mt-2" aria-live="polite"></p>
+                            <p class="hidden text-xs text-red-600 mt-1" data-error-for="photos"></p>
+                            <p class="text-xs text-slate-500 mt-2">1x Gesamtansicht + 1-2 Nahaufnahmen. Bis zu 6 Fotos, wir verkleinern sie automatisch.</p>
                         </div>
                         <div>
                             <label for="service" class="block text-sm font-medium text-slate-700 mb-2">Was soll gereinigt werden? *</label>
-                            <select id="service" name="service" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-clean-500 focus:ring-2 focus:ring-clean-500/20 transition outline-none">
+                            <select id="service" name="service" required data-validate="service" autocomplete="off" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-clean-500 focus:ring-2 focus:ring-clean-500/20 transition outline-none">
                                 <option value="">Bitte auswählen...</option>
                                 <option value="sofa">Sofa / Couch / Eckcouch</option>
                                 <option value="sessel-stuehle">Sessel / Stühle</option>
@@ -1116,37 +1170,40 @@
                                 <option value="matratze-zusatz">Matratze als Zusatzleistung</option>
                                 <option value="sonstiges">Sonstiges Polster</option>
                             </select>
+                            <p class="hidden text-xs text-red-600 mt-1" data-error-for="service"></p>
                         </div>
                         <div>
-                            <label for="photos" class="block text-sm font-medium text-slate-700 mb-2">Fotos hochladen</label>
-                            <div id="photos-dropzone" class="relative rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50 px-4 py-5 transition hover:border-clean-400 hover:bg-clean-50/60">
-                                <input type="file" id="photos" name="photos[]" multiple accept="image/jpeg,image/png,image/webp" class="sr-only">
-                                <label for="photos" class="flex cursor-pointer flex-col items-center justify-center gap-3 text-center">
-                                    <span class="flex h-12 w-12 items-center justify-center rounded-full bg-white text-clean-700 shadow-sm" aria-hidden="true">
-                                        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.6-4.6a2 2 0 012.8 0L16 16m-2-2l1.6-1.6a2 2 0 012.8 0L20 14m-7-7h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                                        </svg>
-                                    </span>
-                                    <span>
-                                        <span class="block text-sm font-bold text-slate-800">Fotos auswählen oder hierher ziehen</span>
-                                        <span class="mt-1 block text-xs text-slate-500">JPG, PNG oder WebP · maximal 4 Fotos · 5 MB pro Bild</span>
-                                    </span>
-                                </label>
+                            <label for="location" class="block text-sm font-medium text-slate-700 mb-2">Ort / PLZ *</label>
+                            <input type="text" id="location" name="location" required data-validate="location" autocomplete="address-level2" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-clean-500 focus:ring-2 focus:ring-clean-500/20 transition outline-none" placeholder="z.B. Jülich, 52428, Düren">
+                            <p class="hidden text-xs text-red-600 mt-1" data-error-for="location"></p>
+                        </div>
+                        <div class="grid sm:grid-cols-2 gap-4">
+                            <div>
+                                <label for="name" class="block text-sm font-medium text-slate-700 mb-2">Name *</label>
+                                <input type="text" id="name" name="name" required data-validate="name" autocomplete="name" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-clean-500 focus:ring-2 focus:ring-clean-500/20 transition outline-none">
+                                <p class="hidden text-xs text-red-600 mt-1" data-error-for="name"></p>
                             </div>
-                            <div id="photos-preview-grid" class="hidden grid grid-cols-2 gap-3 sm:grid-cols-4 mt-3"></div>
-                            <p id="photos-summary" class="hidden text-xs text-fresh-700 mt-2" aria-live="polite"></p>
-                            <p class="text-xs text-slate-500 mt-2">Optional, aber empfohlen: 1-4 Fotos helfen beim fairen Festpreis. Max. 5 MB pro Bild.</p>
+                            <div>
+                                <label for="phone" class="block text-sm font-medium text-slate-700 mb-2">Telefon *</label>
+                                <input type="tel" id="phone" name="phone" required data-validate="phone" autocomplete="tel" inputmode="tel" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-clean-500 focus:ring-2 focus:ring-clean-500/20 transition outline-none" placeholder="0178 33 66 988">
+                                <p class="hidden text-xs text-red-600 mt-1" data-error-for="phone"></p>
+                            </div>
                         </div>
                         <div>
-                            <label for="message" class="block text-sm font-medium text-slate-700 mb-2">Ihre Nachricht *</label>
-                            <textarea id="message" name="message" rows="4" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-clean-500 focus:ring-2 focus:ring-clean-500/20 transition outline-none resize-none" placeholder="Beschreiben Sie kurz: Größe, Material, Flecken, Haustiere, gewünschter Zeitraum."></textarea>
+                            <label for="email" class="block text-sm font-medium text-slate-700 mb-2">E-Mail <span class="text-slate-400 font-normal">(optional)</span></label>
+                            <input type="email" id="email" name="email" data-validate="email" autocomplete="email" inputmode="email" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-clean-500 focus:ring-2 focus:ring-clean-500/20 transition outline-none">
+                            <p class="hidden text-xs text-red-600 mt-1" data-error-for="email"></p>
+                        </div>
+                        <div>
+                            <label for="message" class="block text-sm font-medium text-slate-700 mb-2">Ihre Nachricht <span class="text-slate-400 font-normal">(optional)</span></label>
+                            <textarea id="message" name="message" rows="3" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-clean-500 focus:ring-2 focus:ring-clean-500/20 transition outline-none resize-none" placeholder="z.B. 3-Sitzer, Flecken vom Hund"></textarea>
                         </div>
                         <label class="flex items-start gap-3 text-sm text-slate-600">
                             <input type="checkbox" name="privacy" required class="mt-1 rounded border-slate-300 text-clean-600 focus:ring-clean-500">
-                            <span>Ich stimme zu, dass meine Angaben zur Bearbeitung der Anfrage gespeichert und beantwortet werden. Details stehen in der <a href="datenschutz.html" class="text-clean-600 hover:underline">Datenschutzerklärung</a>.</span>
+                            <span>Ich stimme zu, dass meine Angaben zur Bearbeitung der Anfrage gespeichert und beantwortet werden. Details stehen in der <a href="datenschutz.html" target="_blank" rel="noopener" class="text-clean-600 hover:underline">Datenschutzerklärung</a>.</span>
                         </label>
                         <button id="lead-submit" type="submit" class="w-full bg-gradient-to-r from-clean-500 to-fresh-500 text-white py-4 rounded-xl font-bold text-lg hover:shadow-lg hover:shadow-clean-500/30 transition duration-300 disabled:cursor-not-allowed disabled:opacity-80">
-                            <span id="lead-submit-label">Anfrage mit Fotos senden</span>
+                            <span id="lead-submit-label">Kostenlose Preisschatzung per Foto</span>
                         </button>
                         <div id="form-inline-status" class="hidden rounded-2xl px-4 py-3 text-sm font-medium" role="status" aria-live="polite"></div>
                         <p class="text-xs text-slate-500 text-center">Teppiche bieten wir aktuell nicht als reguläre Dienstleistung an.</p>
@@ -1164,8 +1221,8 @@
                                 </svg>
                             </div>
                             <div class="min-w-0">
-                                <div class="text-white/80 text-xs sm:text-sm">Schnellste Antwort via</div>
-                                <div class="text-xl sm:text-2xl font-bold">WhatsApp</div>
+                                <div class="text-white/80 text-xs sm:text-sm">Alternative</div>
+                                <div class="text-xl sm:text-2xl font-bold">Lieber per WhatsApp?</div>
                                 <div class="text-white/90 text-sm sm:text-base">0178 33 66 988</div>
                             </div>
                             <svg class="w-5 h-5 sm:w-6 sm:h-6 ml-auto flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1282,7 +1339,7 @@
     </footer>
 
     <!-- FIXED WHATSAPP BUTTON -->
-    <a href="https://wa.me/491783366988?text=Hallo!%20Ich%20möchte%20ein%20Foto%20für%20ein%20Angebot%20zur%20Polsterreinigung%20senden." target="_blank" data-track-location="floating" aria-label="WhatsApp Angebot anfragen" class="fixed bottom-6 right-6 z-50 whatsapp-btn bg-[#25D366] text-white p-4 rounded-full shadow-2xl hover:bg-[#20bd5a] transition-all duration-300 hover:scale-110">
+    <a id="floating-whatsapp" href="https://wa.me/491783366988" target="_blank" rel="noopener" data-track-location="floating" aria-label="WhatsApp schreiben" class="floating-whatsapp-cta fixed bottom-6 right-6 z-50 bg-[#25D366] text-white p-4 rounded-full hover:bg-[#20bd5a] transition-all duration-300 hover:scale-110">
         <svg class="w-8 h-8 floating" fill="currentColor" viewBox="0 0 24 24">
             <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
         </svg>
@@ -1334,6 +1391,26 @@
             (window.plausible.q = window.plausible.q || []).push(arguments);
         };
 
+        function trackLeadConversion(mode) {
+            window.plausible('form_submit_success', { props: { form: 'polsterreinigung_contact', mode } });
+            if (typeof window.gtag === 'function') {
+                window.gtag('event', 'manual_event_SUBMIT_LEAD_FORM', {
+                    event_category: 'lead',
+                    event_label: 'polsterreinigung_contact',
+                    form_id: 'polsterreinigung_contact',
+                    form_mode: mode,
+                    value: 1,
+                    currency: 'EUR'
+                });
+                window.gtag('event', 'generate_lead', {
+                    event_category: 'lead',
+                    event_label: 'polsterreinigung_contact',
+                    form_id: 'polsterreinigung_contact',
+                    form_mode: mode
+                });
+            }
+        }
+
         document.querySelectorAll('a[href^="https://wa.me/"]').forEach(link => {
             link.addEventListener('click', () => {
                 window.plausible('whatsapp_click', { props: { location: link.dataset.trackLocation || 'unknown' } });
@@ -1350,6 +1427,60 @@
             });
         });
 
+        const floatingWhatsappCta = document.getElementById('floating-whatsapp');
+        const contactSection = document.getElementById('kontakt');
+        const cookieBanner = document.getElementById('cookieBanner');
+
+        function updateFloatingWhatsappCookieOffset() {
+            if (!floatingWhatsappCta) return;
+            const cookieVisible = cookieBanner && window.getComputedStyle(cookieBanner).display !== 'none';
+            const cookieLift = cookieVisible
+                ? Math.ceil(cookieBanner.getBoundingClientRect().height + 18)
+                : 0;
+            floatingWhatsappCta.style.setProperty('--floating-wa-lift', `${cookieLift}px`);
+        }
+
+        function setFloatingWhatsappFormState(isVisible) {
+            floatingWhatsappCta?.classList.remove('is-form-visible');
+        }
+
+        function updateFloatingWhatsappFormState() {
+            if (!contactSection) return;
+            const rect = contactSection.getBoundingClientRect();
+            setFloatingWhatsappFormState(rect.top < window.innerHeight * 0.92 && rect.bottom > window.innerHeight * 0.08);
+        }
+
+        if (floatingWhatsappCta) {
+            updateFloatingWhatsappCookieOffset();
+            updateFloatingWhatsappFormState();
+            window.addEventListener('scroll', updateFloatingWhatsappFormState, { passive: true });
+            window.addEventListener('resize', () => {
+                updateFloatingWhatsappCookieOffset();
+                updateFloatingWhatsappFormState();
+            }, { passive: true });
+
+            if (cookieBanner && 'MutationObserver' in window) {
+                new MutationObserver(updateFloatingWhatsappCookieOffset).observe(cookieBanner, {
+                    attributes: true,
+                    attributeFilter: ['class', 'style'],
+                });
+            }
+
+            if (contactSection && 'IntersectionObserver' in window) {
+                const contactObserver = new IntersectionObserver(entries => {
+                    if (entries.some(entry => entry.isIntersecting)) {
+                        setFloatingWhatsappFormState(true);
+                    } else {
+                        updateFloatingWhatsappFormState();
+                    }
+                }, {
+                    rootMargin: '0px 0px -8% 0px',
+                    threshold: 0.01,
+                });
+                contactObserver.observe(contactSection);
+            }
+        }
+
         const leadForm = document.getElementById('lead-form');
         const formSuccess = document.getElementById('form-success');
         const formError = document.getElementById('form-error');
@@ -1357,13 +1488,14 @@
         const submitButton = document.getElementById('lead-submit');
         const submitLabel = document.getElementById('lead-submit-label');
         const photosInput = document.getElementById('photos');
+        const photosCameraInput = document.getElementById('photos-camera');
         const photosDropzone = document.getElementById('photos-dropzone');
         const photosPreviewGrid = document.getElementById('photos-preview-grid');
         const photosSummary = document.getElementById('photos-summary');
-        const submitDefaultLabel = submitLabel?.textContent || 'Anfrage mit Fotos senden';
-        const allowedFileTypes = ['image/jpeg', 'image/png', 'image/webp'];
-        const maxFileSize = 5 * 1024 * 1024;
-        const maxFiles = 4;
+        const submitDefaultLabel = submitLabel?.textContent || 'Kostenlose Preisschatzung per Foto';
+        const formRetryMessage = 'Die Anfrage konnte gerade nicht bestatigt werden. Ihre Eingaben bleiben erhalten - bitte versuchen Sie es erneut.';
+        const maxFileSize = 25 * 1024 * 1024;
+        const maxFiles = 6;
         let photoPreviewUrls = [];
         let isSubmitting = false;
         let formStarted = false;
@@ -1394,9 +1526,20 @@
             formInlineStatus?.classList.add('hidden');
         }
 
-        function setInvalid(field) {
+        function errorTargetFor(field) {
+            if (field === photosInput) return leadForm?.querySelector('[data-error-for="photos"]');
+            const key = field?.name || field?.id || '';
+            return key ? leadForm?.querySelector(`[data-error-for="${key}"]`) : null;
+        }
+
+        function setInvalid(field, message = '') {
             field?.setAttribute('aria-invalid', 'true');
             field?.classList.add('border-red-400', 'ring-2', 'ring-red-100');
+            const target = errorTargetFor(field);
+            if (target && message) {
+                target.textContent = message;
+                target.classList.remove('hidden');
+            }
             if (field === photosInput) {
                 photosDropzone?.classList.add('border-red-400', 'bg-red-50');
                 photosDropzone?.classList.remove('border-slate-200', 'bg-slate-50');
@@ -1406,16 +1549,15 @@
         function clearInvalid(field) {
             field?.removeAttribute('aria-invalid');
             field?.classList.remove('border-red-400', 'ring-2', 'ring-red-100');
+            const target = errorTargetFor(field);
+            if (target) {
+                target.textContent = '';
+                target.classList.add('hidden');
+            }
             if (field === photosInput) {
                 photosDropzone?.classList.remove('border-red-400', 'bg-red-50');
                 photosDropzone?.classList.add('border-slate-200', 'bg-slate-50');
             }
-        }
-
-        function formatFileSize(bytes) {
-            if (!bytes) return '0 KB';
-            if (bytes < 1024 * 1024) return `${Math.round(bytes / 1024)} KB`;
-            return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
         }
 
         function revokePhotoPreviewUrls() {
@@ -1447,7 +1589,7 @@
             const clipped = combined.length > maxFiles;
             setPhotosFiles(
                 combined,
-                clipped ? 'Maximal 4 Fotos: Die ersten 4 Bilder wurden übernommen.' : ''
+                clipped ? 'Maximal 6 Fotos: Die ersten 6 Bilder wurden übernommen.' : ''
             );
         }
 
@@ -1472,15 +1614,20 @@
             files.forEach((file, index) => {
                 const previewUrl = URL.createObjectURL(file);
                 photoPreviewUrls.push(previewUrl);
-                const isValid = allowedFileTypes.includes(file.type) && file.size <= maxFileSize;
-
                 const tile = document.createElement('div');
-                tile.className = `relative overflow-hidden rounded-xl border bg-white shadow-sm ${isValid ? 'border-slate-200' : 'border-red-300'}`;
+                tile.className = 'relative overflow-hidden rounded-xl border bg-white shadow-sm border-slate-200';
 
                 const image = document.createElement('img');
                 image.src = previewUrl;
                 image.alt = `Ausgewähltes Foto ${index + 1}`;
                 image.className = 'h-24 w-full object-cover sm:h-28';
+                image.onerror = () => {
+                    image.remove();
+                    const placeholder = document.createElement('div');
+                    placeholder.className = 'flex h-24 w-full items-center justify-center bg-clean-50 text-xs font-bold text-clean-800 sm:h-28';
+                    placeholder.textContent = 'Foto wird vorbereitet';
+                    tile.prepend(placeholder);
+                };
                 tile.appendChild(image);
 
                 const removeButton = document.createElement('button');
@@ -1500,14 +1647,42 @@
                 footer.appendChild(name);
 
                 const meta = document.createElement('p');
-                meta.className = `text-[11px] font-semibold ${isValid ? 'text-slate-500' : 'text-red-600'}`;
-                meta.textContent = isValid ? formatFileSize(file.size) : 'Nur JPG, PNG, WebP bis 5 MB';
+                meta.className = 'text-[11px] font-semibold text-slate-500';
+                meta.textContent = 'Bereit zum Verkleinern';
                 footer.appendChild(meta);
 
                 tile.appendChild(footer);
                 photosPreviewGrid.appendChild(tile);
             });
             photosPreviewGrid.classList.remove('hidden');
+        }
+
+        function phoneDigits(value) {
+            return (value || '').replace(/\D+/g, '');
+        }
+
+        function validationMessageFor(field) {
+            if (!field) return '';
+            const value = field.value?.trim() || '';
+            if (field.name === 'name' && !value) return 'Bitte geben Sie Ihren Namen ein.';
+            if (field.name === 'phone') {
+                if (!value) return 'Bitte geben Sie Ihre Telefonnummer ein.';
+                if (phoneDigits(value).length < 6) return 'Bitte geben Sie eine gültige Telefonnummer ein.';
+            }
+            if (field.name === 'email' && value && !field.validity.valid) return 'Bitte geben Sie eine gültige E-Mail-Adresse ein.';
+            if (field.name === 'location' && !value) return 'Bitte geben Sie Ihren Ort oder Ihre PLZ ein.';
+            if (field.name === 'service' && !value) return 'Bitte wählen Sie aus, was gereinigt werden soll.';
+            return '';
+        }
+
+        function validateField(field, showMessage = true) {
+            const message = validationMessageFor(field);
+            if (message) {
+                if (showMessage) setInvalid(field, message);
+                return false;
+            }
+            clearInvalid(field);
+            return true;
         }
 
         function validateLeadForm() {
@@ -1517,50 +1692,38 @@
 
             const name = leadForm.elements.name;
             const email = leadForm.elements.email;
+            const phone = leadForm.elements.phone;
             const location = leadForm.elements.location;
             const service = leadForm.elements.service;
-            const message = leadForm.elements.message;
             const privacy = leadForm.elements.privacy;
             const files = Array.from(photosInput?.files || []);
 
-            const checks = [
-                [name, !name.value.trim(), 'Bitte geben Sie Ihren Namen ein.'],
-                [email, !email.value.trim(), 'Bitte geben Sie Ihre E-Mail-Adresse ein.'],
-                [email, email.value.trim() && !email.validity.valid, 'Bitte geben Sie eine gültige E-Mail-Adresse ein.'],
-                [location, !location.value.trim(), 'Bitte geben Sie Ihren Ort oder Stadtteil ein.'],
-                [service, !service.value, 'Bitte wählen Sie aus, was gereinigt werden soll.'],
-                [message, !message.value.trim(), 'Bitte beschreiben Sie kurz, was gereinigt werden soll.'],
-                [privacy, !privacy.checked, 'Bitte stimmen Sie der Datenschutzerklärung zu.'],
-            ];
+            for (const field of [service, location, name, phone, email]) {
+                const text = validationMessageFor(field);
+                if (!text) continue;
+                setInvalid(field, text);
+                setBox(formError, 'error', text);
+                setInlineStatus('error', text);
+                field?.focus({ preventScroll: false });
+                return false;
+            }
 
-            for (const [field, failed, text] of checks) {
-                if (failed) {
-                    setInvalid(field);
-                    setBox(formError, 'error', text);
-                    setInlineStatus('error', text);
-                    field?.focus({ preventScroll: false });
-                    return false;
-                }
+            if (!privacy.checked) {
+                const text = 'Bitte stimmen Sie der Datenschutzerklärung zu.';
+                setInvalid(privacy);
+                setBox(formError, 'error', text);
+                setInlineStatus('error', text);
+                privacy.focus({ preventScroll: false });
+                return false;
             }
 
             if (files.length > maxFiles) {
-                const text = 'Bitte wählen Sie maximal 4 Fotos aus.';
-                setInvalid(photosInput);
+                const text = 'Bitte wählen Sie maximal 6 Fotos aus.';
+                setInvalid(photosInput, text);
                 setBox(formError, 'error', text);
                 setInlineStatus('error', text);
                 photosInput?.focus({ preventScroll: false });
                 return false;
-            }
-
-            for (const file of files) {
-                if (!allowedFileTypes.includes(file.type) || file.size > maxFileSize) {
-                    const text = 'Bitte laden Sie nur JPG, PNG oder WebP Fotos bis 5 MB pro Bild hoch.';
-                    setInvalid(photosInput);
-                    setBox(formError, 'error', text);
-                    setInlineStatus('error', text);
-                    photosInput?.focus({ preventScroll: false });
-                    return false;
-                }
             }
 
             return true;
@@ -1570,8 +1733,8 @@
             isSubmitting = true;
             submitButton.disabled = true;
             submitButton.setAttribute('aria-busy', 'true');
-            submitLabel.textContent = 'Wird gesendet...';
-            setInlineStatus('sending', 'Ihre Anfrage wird gerade gesendet. Bitte warten Sie kurz.');
+            submitLabel.textContent = 'Fotos werden verkleinert...';
+            setInlineStatus('sending', 'Fotos werden verkleinert. Ihre Anfrage wird danach gesendet.');
         }
 
         function setIdleState() {
@@ -1591,14 +1754,14 @@
 
         const urlParams = new URLSearchParams(window.location.search);
         if (urlParams.get('anfrage') === 'ok') {
-            const message = 'Danke, Ihre Anfrage wurde gesendet. Wir melden uns schnellstmöglich mit einem Angebot.';
+            const message = 'Danke, Ihre Anfrage ist angekommen. Wir melden uns meist innerhalb von 30 Minuten.';
             setBox(formSuccess, 'success', message);
             setInlineStatus('success', message);
-            window.plausible('form_submit_success', { props: { form: 'polsterreinigung_contact', mode: 'redirect_fallback' } });
+            trackLeadConversion('redirect_fallback');
             window.history.replaceState(null, '', `${window.location.pathname}${window.location.hash || ''}`);
         }
         if (urlParams.get('anfrage') === 'fehler') {
-            const message = 'Die Anfrage konnte nicht gesendet werden. Bitte prüfen Sie Ihre Angaben oder schreiben Sie uns direkt per WhatsApp.';
+            const message = formRetryMessage;
             setBox(formError, 'error', message);
             setInlineStatus('error', message);
             window.plausible('form_submit_error', { props: { form: 'polsterreinigung_contact', mode: 'redirect_fallback' } });
@@ -1609,10 +1772,16 @@
             clearInvalid(photosInput);
             const files = Array.from(photosInput.files || []);
             if (files.length > maxFiles) {
-                setPhotosFiles(files, 'Maximal 4 Fotos: Die ersten 4 Bilder wurden übernommen.');
+                setPhotosFiles(files, 'Maximal 6 Fotos: Die ersten 6 Bilder wurden übernommen.');
                 return;
             }
             updatePhotosSummary();
+        });
+
+        photosCameraInput?.addEventListener('change', () => {
+            clearInvalid(photosInput);
+            appendPhotos(photosCameraInput.files || []);
+            photosCameraInput.value = '';
         });
 
         photosPreviewGrid?.addEventListener('click', event => {
@@ -1644,6 +1813,85 @@
             formStarted = true;
             window.plausible('form_start', { props: { form: 'polsterreinigung_contact' } });
         });
+
+        leadForm?.querySelectorAll('[data-validate]').forEach(field => {
+            field.addEventListener('blur', () => validateField(field));
+            field.addEventListener('input', () => clearInvalid(field));
+            field.addEventListener('change', () => clearInvalid(field));
+        });
+
+        leadForm?.elements.privacy?.addEventListener('change', () => clearInvalid(leadForm.elements.privacy));
+
+        async function compressImageFile(file, maxSide = 2560, quality = 0.82) {
+            return new Promise((resolve, reject) => {
+                const img = new Image();
+                const url = URL.createObjectURL(file);
+                img.onload = () => {
+                    URL.revokeObjectURL(url);
+                    let width = img.naturalWidth || img.width;
+                    let height = img.naturalHeight || img.height;
+                    if (width > maxSide || height > maxSide) {
+                        if (width > height) {
+                            height = Math.round(height * maxSide / width);
+                            width = maxSide;
+                        } else {
+                            width = Math.round(width * maxSide / height);
+                            height = maxSide;
+                        }
+                    }
+                    const canvas = document.createElement('canvas');
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.fillStyle = '#FFFFFF';
+                    ctx.fillRect(0, 0, width, height);
+                    ctx.drawImage(img, 0, 0, width, height);
+                    canvas.toBlob(blob => {
+                        if (!blob) {
+                            reject(new Error('canvas toBlob failed'));
+                            return;
+                        }
+                        const baseName = file.name.replace(/\.[^.]+$/, '') || 'foto';
+                        resolve(new File([blob], `${baseName}.jpg`, { type: 'image/jpeg', lastModified: file.lastModified || Date.now() }));
+                    }, 'image/jpeg', quality);
+                };
+                img.onerror = () => {
+                    URL.revokeObjectURL(url);
+                    reject(new Error('image load failed'));
+                };
+                img.src = url;
+            });
+        }
+
+        function isImageCandidate(file) {
+            return file.type.startsWith('image/') || /\.(heic|heif|jpe?g|png|webp)$/i.test(file.name);
+        }
+
+        async function compressPhotos(fileList) {
+            if (!fileList || fileList.length === 0) return [];
+            const results = [];
+            for (const file of fileList) {
+                if (!isImageCandidate(file)) {
+                    throw new Error('photo_prepare_failed');
+                }
+
+                try {
+                    const prepared = await compressImageFile(file);
+                    if (prepared.type !== 'image/jpeg' || prepared.size > maxFileSize) {
+                        throw new Error('photo_prepare_failed');
+                    }
+                    results.push(prepared);
+                } catch (e) {
+                    if (file.type === 'image/jpeg' && file.size <= maxFileSize) {
+                        results.push(file);
+                        continue;
+                    }
+                    throw new Error('photo_prepare_failed');
+                }
+            }
+            return results;
+        }
+
         leadForm?.addEventListener('submit', async event => {
             event.preventDefault();
             if (isSubmitting) return;
@@ -1656,9 +1904,14 @@
             setSubmittingState();
             try {
                 window.PLJAttribution?.fill(leadForm);
+                const formData = new FormData(leadForm);
+                formData.delete('photos[]');
+                const compressedPhotos = await compressPhotos(photosInput?.files);
+                compressedPhotos.forEach(file => formData.append('photos[]', file));
+                setInlineStatus('sending', 'Ihre Anfrage wird gerade gesendet. Bitte warten Sie kurz.');
                 const response = await fetch(leadForm.action, {
                     method: 'POST',
-                    body: new FormData(leadForm),
+                    body: formData,
                     headers: {
                         'Accept': 'application/json',
                         'X-Requested-With': 'XMLHttpRequest',
@@ -1668,15 +1921,24 @@
                 if (!response.ok || !data?.ok) {
                     throw new Error(data?.message || 'submit_failed');
                 }
-                const message = data.message || 'Danke, Ihre Anfrage wurde gesendet. Wir melden uns schnellstmöglich mit einem Angebot.';
+                const message = data.message || (data.lead_id
+                    ? `Danke, Ihre Anfrage #${data.lead_id} ist angekommen. Wir melden uns meist innerhalb von 30 Minuten.`
+                    : 'Danke, Ihre Anfrage ist angekommen. Wir melden uns meist innerhalb von 30 Minuten.');
                 leadForm.reset();
                 updatePhotosSummary();
                 setSuccessState(message);
-                window.plausible('form_submit_success', { props: { form: 'polsterreinigung_contact', mode: 'ajax' } });
+                if (!data.spam_needs_review) {
+                    trackLeadConversion(data.status || 'ajax');
+                }
             } catch (error) {
-                const message = 'Die Anfrage konnte nicht gesendet werden. Bitte schreiben Sie uns direkt per WhatsApp oder rufen Sie uns an.';
+                const message = error?.message === 'photo_prepare_failed'
+                    ? 'Ein Foto konnte nicht vorbereitet werden. Bitte entfernen Sie es oder nehmen Sie ein neues Foto auf.'
+                    : formRetryMessage;
                 setBox(formError, 'error', message);
                 setInlineStatus('error', message);
+                if (error?.message === 'photo_prepare_failed') {
+                    setInvalid(photosInput, message);
+                }
                 setIdleState();
                 window.plausible('form_submit_error', { props: { form: 'polsterreinigung_contact', mode: 'ajax' } });
             }

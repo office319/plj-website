@@ -11,9 +11,9 @@ function wants_json(): bool
 function status_message(string $status): string
 {
     if ($status === 'ok') {
-        return 'Danke, Ihre Anfrage wurde gesendet. Wir melden uns schnellstmöglich mit einem Angebot.';
+        return 'Danke, Ihre Anfrage ist angekommen. Wir melden uns meist innerhalb von 30 Minuten.';
     }
-    return 'Die Anfrage konnte nicht gesendet werden. Bitte prüfen Sie Ihre Angaben oder schreiben Sie uns direkt per WhatsApp.';
+    return 'Die Anfrage konnte gerade nicht bestatigt werden. Ihre Eingaben bleiben erhalten - bitte versuchen Sie es erneut.';
 }
 
 function finish_with_status(string $status, array $extra = []): void
@@ -247,7 +247,7 @@ function build_html_mail(array $data): string
         . $trackingBlock
         . '<tr><td style="padding:22px 28px 6px;">' . $buttons . '</td></tr>'
         . '<tr><td style="padding:0 28px 26px;">'
-        . '<p style="margin:8px 0 0;color:#5d7375;font:600 13px/1.45 -apple-system,BlinkMacSystemFont,Segoe UI,Arial,sans-serif;">Datenschutz: Kunde hat der Verarbeitung zur Bearbeitung der Anfrage zugestimmt. Bilder sind nur als Mail-Anhang enthalten und werden nicht lokal auf der Website gespeichert.</p>'
+        . '<p style="margin:8px 0 0;color:#5d7375;font:600 13px/1.45 -apple-system,BlinkMacSystemFont,Segoe UI,Arial,sans-serif;">Datenschutz: Kunde hat der Verarbeitung zur Bearbeitung der Anfrage zugestimmt. Bilder wurden im privaten Lead-Archiv gesichert.</p>'
         . '</td></tr>'
         . '</table>'
         . '<p style="max-width:680px;margin:14px 0 0;color:#7c8f91;font:600 12px -apple-system,BlinkMacSystemFont,Segoe UI,Arial,sans-serif;text-align:center;">Automatisch gesendet von polsterreinigungjuelich.de</p>'
@@ -261,6 +261,7 @@ function attachment_log_data(array $attachments): array
             'name' => $attachment['name'] ?? '',
             'type' => $attachment['type'] ?? '',
             'size' => $attachment['size'] ?? 0,
+            'stored_path' => $attachment['stored_path'] ?? '',
         ];
     }, $attachments);
 }
@@ -277,18 +278,82 @@ function attachment_relay_data(array $attachments): array
     }, $attachments);
 }
 
-function append_lead_archive(array $data, array $attachments, array $delivery): void
+function lead_archive_dir(): string
 {
-    $archiveDir = dirname(__DIR__) . '/lead_logs';
+    return dirname(__DIR__) . '/lead_logs';
+}
+
+function ensure_private_dir(string $dir): bool
+{
+    if (!is_dir($dir) && !mkdir($dir, 0750, true) && !is_dir($dir)) {
+        return false;
+    }
+    @chmod($dir, 0750);
+    return true;
+}
+
+function save_archive_attachments(string $leadId, array $attachments)
+{
+    if ($attachments === []) {
+        return [];
+    }
+
+    $safeLeadId = preg_replace('/[^a-zA-Z0-9._-]+/', '-', $leadId) ?: 'unknown-lead';
+    $uploadDir = lead_archive_dir() . '/uploads/' . $safeLeadId;
+    if (!ensure_private_dir($uploadDir)) {
+        error_log('PLJ lead archive: could not create upload directory');
+        return false;
+    }
+
+    $saved = [];
+    foreach ($attachments as $index => $attachment) {
+        $encoded = preg_replace('/\s+/', '', (string)($attachment['content'] ?? ''));
+        $binary = base64_decode($encoded, true);
+        if ($binary === false) {
+            error_log('PLJ lead archive: attachment base64 decode failed');
+            return false;
+        }
+
+        $originalName = (string)($attachment['name'] ?? ('foto-' . ($index + 1) . '.jpg'));
+        $baseName = preg_replace('/[^a-zA-Z0-9._-]+/', '-', basename($originalName));
+        if ($baseName === '' || $baseName === '.' || $baseName === '..') {
+            $baseName = 'foto-' . ($index + 1) . '.jpg';
+        }
+
+        $fileName = sprintf('%02d-%s', $index + 1, $baseName);
+        $targetPath = $uploadDir . '/' . $fileName;
+        if (file_put_contents($targetPath, $binary, LOCK_EX) === false) {
+            error_log('PLJ lead archive: attachment write failed');
+            return false;
+        }
+        @chmod($targetPath, 0640);
+
+        $saved[] = array_merge($attachment, [
+            'stored_path' => 'uploads/' . $safeLeadId . '/' . $fileName,
+        ]);
+    }
+
+    return $saved;
+}
+
+function append_lead_archive(array $data, array $attachments, array $delivery, string $status = 'received'): bool
+{
+    $archiveDir = lead_archive_dir();
     if (!is_dir($archiveDir) && !mkdir($archiveDir, 0750, true) && !is_dir($archiveDir)) {
         error_log('PLJ lead archive: could not create directory');
-        return;
+        return false;
+    }
+    @chmod($archiveDir, 0750);
+
+    $savedAttachments = save_archive_attachments((string)($data['lead_id'] ?? ''), $attachments);
+    if ($savedAttachments === false) {
+        return false;
     }
 
     $record = [
         'created_at' => date('c'),
         'source' => 'polsterreinigungjuelich.de/contact.php',
-        'status' => 'received',
+        'status' => $status,
         'data' => [
             'lead_id' => $data['lead_id'] ?? '',
             'name' => $data['name'],
@@ -300,7 +365,7 @@ function append_lead_archive(array $data, array $attachments, array $delivery): 
             'attachment_count' => $data['attachment_count'],
             'tracking' => compact_tracking($data['tracking'] ?? []),
         ],
-        'attachments' => attachment_log_data($attachments),
+        'attachments' => attachment_log_data($savedAttachments),
         'delivery' => $delivery,
         'request' => [
             'ip' => $_SERVER['REMOTE_ADDR'] ?? '',
@@ -311,13 +376,58 @@ function append_lead_archive(array $data, array $attachments, array $delivery): 
     $encoded = json_encode($record, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
     if ($encoded === false) {
         error_log('PLJ lead archive: json encode failed');
-        return;
+        return false;
     }
 
     $archiveFile = $archiveDir . '/leads.jsonl';
     $written = file_put_contents($archiveFile, $encoded . "\n", FILE_APPEND | LOCK_EX);
     if ($written === false) {
         error_log('PLJ lead archive: write failed');
+        return false;
+    }
+
+    @chmod($archiveFile, 0640);
+    return true;
+}
+
+function append_blocked_submission(array $data, array $reasons): void
+{
+    $archiveDir = lead_archive_dir();
+    if (!is_dir($archiveDir) && !mkdir($archiveDir, 0750, true) && !is_dir($archiveDir)) {
+        error_log('PLJ blocked submission archive: could not create directory');
+        return;
+    }
+
+    $record = [
+        'created_at' => date('c'),
+        'source' => 'polsterreinigungjuelich.de/contact.php',
+        'status' => 'needs_review',
+        'reasons' => $reasons,
+        'data' => [
+            'name' => $data['name'] ?? '',
+            'email' => $data['email'] ?? '',
+            'phone' => $data['phone'] ?? '',
+            'location' => $data['location'] ?? '',
+            'service' => $data['service'] ?? '',
+            'message' => $data['message'] ?? '',
+            'tracking' => compact_tracking($data['tracking'] ?? []),
+        ],
+        'request' => [
+            'ip' => $_SERVER['REMOTE_ADDR'] ?? '',
+            'user_agent' => $_SERVER['HTTP_USER_AGENT'] ?? '',
+        ],
+    ];
+
+    $encoded = json_encode($record, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    if ($encoded === false) {
+        error_log('PLJ blocked submission archive: json encode failed');
+        return;
+    }
+
+    $archiveFile = $archiveDir . '/blocked.jsonl';
+    $written = file_put_contents($archiveFile, $encoded . "\n", FILE_APPEND | LOCK_EX);
+    if ($written === false) {
+        error_log('PLJ blocked submission archive: write failed');
         return;
     }
 
@@ -333,6 +443,57 @@ function make_lead_id(): string
     }
 
     return 'PLJ-' . gmdate('Ymd-His') . '-' . $suffix;
+}
+
+function has_url_like_text(string $value): bool
+{
+    return preg_match('~(?:https?://|www\.|[a-z0-9][a-z0-9.-]{1,80}\.(?:app|biz|click|cloud|cn|co|com|de|info|io|link|me|net|online|org|ru|shop|site|top|xyz)(?:[/?#:\s]|$))~i', $value) === 1;
+}
+
+function spam_filter_reasons(array $data): array
+{
+    $reasons = [];
+    $name = (string)($data['name'] ?? '');
+    $email = strtolower((string)($data['email'] ?? ''));
+    $phone = (string)($data['phone'] ?? '');
+    $location = (string)($data['location'] ?? '');
+    $message = (string)($data['message'] ?? '');
+    $joined = strtolower($name . ' ' . $email . ' ' . $phone . ' ' . $location . ' ' . $message);
+
+    foreach ([$name, $location, $message] as $value) {
+        if (has_url_like_text($value)) {
+            $reasons[] = 'url_in_customer_fields';
+            break;
+        }
+    }
+
+    if (preg_match('~\b(?:btc|bitcoin|crypto|wallet|airdrop|usdt|tether|nft|attested|seed phrase|private key|claim your|congratulations|viagra|casino)\b~i', $joined) === 1) {
+        $reasons[] = 'spam_keywords';
+    }
+
+    if (preg_match('~\b(?:united kingdom|great britain|united states|usa|china|hong kong|singapore|india|pakistan|russia|nigeria|ghana|indonesia|philippines|vietnam|brazil|mexico|canada|australia)\b~i', $location) === 1) {
+        $reasons[] = 'non_service_country_location';
+    }
+
+    if (preg_match('~@(?:icliud\.com|mail\.ru|bk\.ru|list\.ru|10minutemail\.com|tempmail\.|guerrillamail\.)$~i', $email) === 1) {
+        $reasons[] = 'suspicious_email_domain';
+    }
+
+    $digits = preg_replace('/\D+/', '', $phone) ?? '';
+    if ($digits !== '' && !str_starts_with($digits, '0') && !str_starts_with($digits, '49') && !str_starts_with($digits, '0049')) {
+        $reasons[] = 'non_de_phone';
+    }
+
+    $hardReasons = ['url_in_customer_fields', 'spam_keywords', 'suspicious_email_domain'];
+    if (array_intersect($hardReasons, $reasons)) {
+        return array_values(array_unique($reasons));
+    }
+
+    if (in_array('non_service_country_location', $reasons, true) && in_array('non_de_phone', $reasons, true)) {
+        return array_values(array_unique($reasons));
+    }
+
+    return [];
 }
 
 function relay_token(): string
@@ -414,7 +575,11 @@ $message = trim((string)($_POST['message'] ?? ''));
 $privacy = isset($_POST['privacy']);
 $tracking = collect_tracking();
 
-if ($name === '' || $location === '' || $service === '' || $message === '' || !$privacy) {
+if ($name === '' || $location === '' || $service === '' || !$privacy) {
+    finish_with_status('fehler');
+}
+
+if ($phone === '' && $email === '') {
     finish_with_status('fehler');
 }
 
@@ -423,10 +588,21 @@ if ($email !== '' && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
 }
 
 $isTestMode = !empty($_POST['is_test']) || (($_SERVER['HTTP_X_NF_FORMS_TEST'] ?? '') === '1');
+$spamReasons = spam_filter_reasons([
+    'name' => $name,
+    'email' => $email,
+    'phone' => $phone,
+    'location' => $location,
+    'service' => $service,
+    'message' => $message,
+    'tracking' => $tracking,
+]);
+
 if ($isTestMode) {
     finish_with_status('ok', [
         'test_mode' => true,
         'side_effects_skipped' => true,
+        'spam_needs_review' => $spamReasons !== [],
     ]);
 }
 
@@ -446,7 +622,7 @@ $bodyLines = [
     'Leistung: ' . $service,
     '',
     'Nachricht:',
-    $message,
+    $message !== '' ? $message : '-',
     '',
     'Datenschutz: zugestimmt',
     'Zeit: ' . date('c'),
@@ -465,8 +641,8 @@ $allowedTypes = [
     'image/png' => 'png',
     'image/webp' => 'webp',
 ];
-$maxFileSize = 5 * 1024 * 1024;
-$maxFiles = 4;
+$maxFileSize = 25 * 1024 * 1024;
+$maxFiles = 6;
 
 if (!empty($_FILES['photos']) && is_array($_FILES['photos']['name'])) {
     $fileCount = min(count($_FILES['photos']['name']), $maxFiles);
@@ -519,6 +695,51 @@ $mailData = [
 ];
 $htmlBody = build_html_mail($mailData);
 
+if ($spamReasons !== []) {
+    $archived = append_lead_archive($mailData, $attachments, [[
+        'transport' => 'local_archive',
+        'ok' => true,
+        'status' => 'needs_review',
+        'reasons' => $spamReasons,
+    ]], 'needs_review');
+
+    if (!$archived) {
+        finish_with_status('fehler', [
+            'status' => 'storage_failed',
+        ]);
+    }
+
+    append_blocked_submission([
+        'name' => $name,
+        'email' => $email,
+        'phone' => $phone,
+        'location' => $location,
+        'service' => $service,
+        'message' => $message,
+        'tracking' => $tracking,
+    ], $spamReasons);
+
+    finish_with_status('ok', [
+        'status' => 'needs_review',
+        'lead_id' => $leadId,
+        'spam_needs_review' => true,
+        'side_effects_skipped' => true,
+        'message' => 'Danke, Ihre Anfrage #' . $leadId . ' ist angekommen. Wir melden uns meist innerhalb von 30 Minuten.',
+    ]);
+}
+
+$archived = append_lead_archive($mailData, $attachments, [[
+    'transport' => 'local_archive',
+    'ok' => true,
+    'status' => 'stored_before_relay',
+]], 'received');
+
+if (!$archived) {
+    finish_with_status('fehler', [
+        'status' => 'storage_failed',
+    ]);
+}
+
 $relay = post_relay([
     'lead_id' => $leadId,
     'submitted_at' => date('c'),
@@ -540,8 +761,11 @@ $relay = post_relay([
     'attachments' => attachment_relay_data($attachments),
 ]);
 
-append_lead_archive($mailData, $attachments, [$relay]);
-finish_with_status(!empty($relay['ok']) ? 'ok' : 'fehler', [
+$deliveryStatus = !empty($relay['ok']) ? 'sent' : 'queued';
+finish_with_status('ok', [
+    'status' => $deliveryStatus,
     'lead_id' => $leadId,
     'mail_transport' => 'app_naszefirmy_smtp_relay',
+    'relay_ok' => !empty($relay['ok']),
+    'message' => 'Danke, Ihre Anfrage #' . $leadId . ' ist angekommen. Wir melden uns meist innerhalb von 30 Minuten.',
 ]);
